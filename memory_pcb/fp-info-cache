@@ -1,4 +1,4 @@
-23178983233218129
+23186080295094299
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -94745,6 +94745,13 @@ C0402 footprint C1525
 2
 2
 new_lib_footprint
+C0603
+C0603 footprint
+C0603 footprint C15849
+0
+2
+2
+new_lib_footprint
 C1206
 C1206 footprint
 C1206 footprint C1848
@@ -94822,6 +94829,20 @@ SW-SMD_L3.9-W3.0-P4.45 footprint C720477
 2
 2
 new_lib_footprint
+SW-TH_100SP3T2B4M6RE
+SW-TH_100SP3T2B4M6RE footprint
+SW-TH_100SP3T2B4M6RE footprint C273357
+0
+5
+5
+new_lib_footprint
+SW_Gateron_LowProfile_THT
+Gateron Low Profile (KS-27 & KS-33) style mechanical keyboard switch, through-hole soldering, single-sided mounting. Gateron Low Profile and Cherry MX Low Profile are NOT compatible.
+switch, low_profile
+0
+2
+2
+new_lib_footprint
 TDFN-8_L2.0-W2.0-P0.50-BL-EP1.2
 TDFN-8_L2.0-W2.0-P0.50-BL-EP1.2 footprint
 TDFN-8_L2.0-W2.0-P0.50-BL-EP1.2 footprint C2682616
@@ -94839,6 +94860,13 @@ new_lib_footprint
 USB-C-SMD_GT-USB-7047C
 USB-C-SMD_GT-USB-7047C footprint
 USB-C-SMD_GT-USB-7047C footprint C963218
+0
+16
+16
+new_lib_footprint
+USB-C_SMD-TYPE-C-31-M-12_1
+USB-C_SMD-TYPE-C-31-M-12_1 footprint
+USB-C_SMD-TYPE-C-31-M-12_1 footprint C165948
 0
 16
 16
