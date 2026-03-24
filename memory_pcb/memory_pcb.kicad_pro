@@ -446,7 +446,9 @@
     }
   },
   "libraries": {
-    "pinned_footprint_libs": [],
+    "pinned_footprint_libs": [
+      "new_lib_footprint"
+    ],
     "pinned_symbol_libs": [
       "new_lib_symbol"
     ]

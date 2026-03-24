@@ -1,1 +1,1 @@
-JLC2KiCadLib C15849 -dir new_lib -symbol_lib new_lib_symbol -footprint_lib new_lib_footprint
+JLC2KiCadLib C21190 -dir new_lib -symbol_lib new_lib_symbol -footprint_lib new_lib_footprint
