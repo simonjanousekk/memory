@@ -67,6 +67,106 @@
 		)
 	)
 	(attr through_hole)
+	(fp_line
+		(start -20.05 -3)
+		(end -14.5 -3)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "b71b85a2-abce-4bee-a21a-2047867f549d")
+	)
+	(fp_line
+		(start -20.05 3)
+		(end -20.05 -3)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "1d02e52b-de11-4345-9721-d7a067b91f4d")
+	)
+	(fp_line
+		(start -14.5 3)
+		(end -20.05 3)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "4dbd550a-4627-4f3d-b8cc-6fdc90e6e842")
+	)
+	(fp_line
+		(start -12.5 0.5)
+		(end -12.5 -0.5)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "7eb0d9d7-5d76-44d8-9af5-e376ef34290f")
+	)
+	(fp_line
+		(start -12.45 -6.6)
+		(end 0 -6.6)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "5c8a5b1c-27e1-4b3e-a348-87171569cbb7")
+	)
+	(fp_line
+		(start -12.45 -4.5)
+		(end -12.45 -6.6)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "107f2f61-33d0-4536-a9d8-c2779e828044")
+	)
+	(fp_line
+		(start -12.45 6.6)
+		(end -12.45 4.5)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "2ec41dc5-d6c8-48c5-9fe9-11cf00562f81")
+	)
+	(fp_line
+		(start 0 -3)
+		(end 0 -1.7)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "582de1fc-a565-4b90-aeab-15dd0cf82361")
+	)
+	(fp_line
+		(start 0 1.75)
+		(end 0 3.05)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "30930ca8-fb22-48bc-9f3c-682a354b18e3")
+	)
+	(fp_line
+		(start 0 6.6)
+		(end -12.45 6.6)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "7527de48-87c5-43b8-a81f-601f5b040b8a")
+	)
 	(fp_rect
 		(start -26.95 -1.5)
 		(end -20.05 1.5)
@@ -77,28 +177,6 @@
 		(fill none)
 		(layer "F.SilkS")
 		(uuid "18b360f7-deac-4f30-b68a-5cd3c851ca53")
-	)
-	(fp_rect
-		(start -20.05 -3)
-		(end -12.95 3)
-		(stroke
-			(width 0.1)
-			(type default)
-		)
-		(fill none)
-		(layer "F.SilkS")
-		(uuid "f27f0409-1f46-40ac-aeb1-53a44e15fde1")
-	)
-	(fp_rect
-		(start -12.45 -6.6)
-		(end 0 6.6)
-		(stroke
-			(width 0.1)
-			(type default)
-		)
-		(fill none)
-		(layer "F.SilkS")
-		(uuid "3d7fd662-67b3-47ca-af92-56b0533ff94f")
 	)
 	(fp_text user "${REFERENCE}"
 		(at 4.5 0 90)
