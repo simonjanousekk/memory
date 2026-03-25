@@ -11474,7 +11474,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "BOOT"
+		(property "Value" "TS-1088-AR02016"
 			(at 160.782 167.132 0)
 			(effects
 				(font
