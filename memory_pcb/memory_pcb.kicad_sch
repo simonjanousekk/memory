@@ -5664,6 +5664,10 @@
 		(uuid "a0fef1fb-67c5-48e9-a6b9-3d2c80e7ac05")
 	)
 	(no_connect
+		(at 78.74 157.48)
+		(uuid "a9511b0c-134f-48d3-89b5-90ca7ebbe19f")
+	)
+	(no_connect
 		(at 72.39 181.61)
 		(uuid "c8d2cb2d-167f-4c0a-be3c-3999079e143d")
 	)
@@ -5929,16 +5933,6 @@
 	)
 	(wire
 		(pts
-			(xy 104.14 179.07) (xy 106.68 179.07)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1eefcfa0-15ec-4a90-825f-40c162c12d67")
-	)
-	(wire
-		(pts
 			(xy 25.4 142.24) (xy 35.56 142.24)
 		)
 		(stroke
@@ -6026,6 +6020,16 @@
 			(type default)
 		)
 		(uuid "277f1c87-002e-4e61-b8a8-db462a246c41")
+	)
+	(wire
+		(pts
+			(xy 104.14 181.61) (xy 106.68 181.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "27a073e7-0309-4191-864c-e1c53ae95418")
 	)
 	(wire
 		(pts
@@ -6229,6 +6233,16 @@
 	)
 	(wire
 		(pts
+			(xy 104.14 194.31) (xy 106.68 194.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "441c83df-d3c2-4983-a30f-f440649eb7b6")
+	)
+	(wire
+		(pts
 			(xy 102.87 171.45) (xy 106.68 171.45)
 		)
 		(stroke
@@ -6236,6 +6250,16 @@
 			(type default)
 		)
 		(uuid "46935b4c-ab71-406e-9a03-bb5d6909284a")
+	)
+	(wire
+		(pts
+			(xy 104.14 179.07) (xy 106.68 179.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "46ae4552-603a-4a26-bcd4-1c6e1e85e2c1")
 	)
 	(wire
 		(pts
@@ -6409,6 +6433,16 @@
 	)
 	(wire
 		(pts
+			(xy 104.14 191.77) (xy 106.68 191.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "55be796d-963d-4faf-aaee-a704363f2f0d")
+	)
+	(wire
+		(pts
 			(xy 203.2 109.22) (xy 215.9 109.22)
 		)
 		(stroke
@@ -6466,16 +6500,6 @@
 			(type default)
 		)
 		(uuid "5c1906d6-75de-435e-b890-4cd312c9a8dd")
-	)
-	(wire
-		(pts
-			(xy 104.14 181.61) (xy 106.68 181.61)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5c846401-b551-4faf-af2d-cf934ce28fd0")
 	)
 	(wire
 		(pts
@@ -7169,16 +7193,6 @@
 	)
 	(wire
 		(pts
-			(xy 104.14 191.77) (xy 106.68 191.77)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c3687ddd-9382-4e6f-99e4-2947a21738f9")
-	)
-	(wire
-		(pts
 			(xy 30.48 50.8) (xy 30.48 53.34)
 		)
 		(stroke
@@ -7439,16 +7453,6 @@
 	)
 	(wire
 		(pts
-			(xy 104.14 194.31) (xy 106.68 194.31)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f522cebf-0169-4a2d-8980-37291663adef")
-	)
-	(wire
-		(pts
 			(xy 236.22 49.53) (xy 236.22 52.07)
 		)
 		(stroke
@@ -7672,7 +7676,7 @@
 		(uuid "1433053f-a99e-4b49-809b-c1fc4b3039da")
 	)
 	(label "47"
-		(at 104.14 194.31 0)
+		(at 104.14 191.77 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -8112,7 +8116,7 @@
 		(uuid "c279d82e-1fdc-4bb1-bd2e-405a76248977")
 	)
 	(label "48"
-		(at 104.14 191.77 0)
+		(at 104.14 194.31 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -8245,6 +8249,87 @@
 		)
 	)
 	(symbol
+		(lib_id "new_lib_symbol:CL10A105KB8NNNC")
+		(at 143.51 179.07 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "027d8b41-3ef1-4672-b265-0f82adc1c563")
+		(property "Reference" "C17"
+			(at 147.32 177.7999 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "1uF 0603"
+			(at 147.32 180.3399 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "new_lib_footprint:C0603"
+			(at 153.67 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://item.szlcsc.com/362304.html"
+			(at 143.383 181.356 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 143.51 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C15849"
+			(at 143.51 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "44f9998a-46dd-4c8e-91e0-854dbcdb68c3")
+		)
+		(pin "2"
+			(uuid "bd2232af-cb06-489f-b21b-24e61f7ba3e7")
+		)
+		(instances
+			(project "memory_pcb"
+				(path "/0b554bab-2912-44e0-8d16-f1690413cb05"
+					(reference "C17")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Jumper:SolderJumper_2_Bridged")
 		(at 242.57 46.99 0)
 		(unit 1)
@@ -8261,12 +8346,13 @@
 				)
 			)
 		)
-		(property "Value" "EXTCOM"
-			(at 249.428 46.99 0)
+		(property "Value" "EXTC"
+			(at 244.856 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
 		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm"
@@ -9203,11 +9289,12 @@
 			)
 		)
 		(property "Value" "VDD"
-			(at 249.428 54.61 0)
+			(at 244.856 54.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
 		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm"
@@ -9470,11 +9557,12 @@
 			)
 		)
 		(property "Value" "SCS"
-			(at 249.428 44.45 0)
+			(at 244.856 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
 		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm"
@@ -9616,12 +9704,13 @@
 				)
 			)
 		)
-		(property "Value" "EXTMOD"
-			(at 249.428 57.15 0)
+		(property "Value" "EXTM"
+			(at 244.856 57.15 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
 		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm"
@@ -9684,11 +9773,12 @@
 			)
 		)
 		(property "Value" "DISP"
-			(at 249.428 49.53 0)
+			(at 244.856 49.53 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
 		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm"
@@ -9961,87 +10051,6 @@
 			(project "memory_pcb"
 				(path "/0b554bab-2912-44e0-8d16-f1690413cb05"
 					(reference "#PWR012")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "new_lib_symbol:CL31B105KBHNNNE")
-		(at 143.51 179.07 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "4742342f-5d5d-4444-a6d8-ba9d3a279f9b")
-		(property "Reference" "C5"
-			(at 147.32 177.7999 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "1uF"
-			(at 147.32 180.3399 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "new_lib_footprint:C1206"
-			(at 153.67 179.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://item.szlcsc.com/89171.html"
-			(at 143.383 181.356 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 143.51 179.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C1848"
-			(at 143.51 179.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "15d283a7-2af6-4889-ac89-228518cd87b6")
-		)
-		(pin "1"
-			(uuid "ffff8507-7e14-46c7-8963-743c3356abd7")
-		)
-		(instances
-			(project "memory_pcb"
-				(path "/0b554bab-2912-44e0-8d16-f1690413cb05"
-					(reference "C5")
 					(unit 1)
 				)
 			)
@@ -12382,11 +12391,12 @@
 			)
 		)
 		(property "Value" "VSS"
-			(at 249.428 59.69 0)
+			(at 244.856 59.69 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
 		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm"
@@ -13995,11 +14005,12 @@
 			)
 		)
 		(property "Value" "VSSA"
-			(at 249.428 62.23 0)
+			(at 244.856 62.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
 		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm"
@@ -14062,11 +14073,12 @@
 			)
 		)
 		(property "Value" "MOSI"
-			(at 249.428 41.91 0)
+			(at 244.856 41.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
 		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm"
@@ -14129,11 +14141,12 @@
 			)
 		)
 		(property "Value" "VDDA"
-			(at 249.428 52.07 0)
+			(at 244.856 52.07 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
 		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm"
@@ -15166,11 +15179,12 @@
 			)
 		)
 		(property "Value" "CKL"
-			(at 249.428 39.37 0)
+			(at 244.856 39.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
 		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm"
