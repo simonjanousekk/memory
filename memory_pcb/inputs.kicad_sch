@@ -2496,7 +2496,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "5.1kOhm"
+		(property "Value" "10kOhm"
 			(at 78.74 30.4801 90)
 			(effects
 				(font
@@ -2534,7 +2534,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C23186"
+		(property "LCSC" "C25804"
 			(at 81.28 31.75 0)
 			(effects
 				(font
@@ -2720,7 +2720,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "5.1kOhm"
+		(property "Value" "10kOhm"
 			(at 218.44 76.1999 90)
 			(effects
 				(font
@@ -2758,7 +2758,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C23186"
+		(property "LCSC" "C25804"
 			(at 215.9 74.93 0)
 			(effects
 				(font
@@ -2998,7 +2998,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "5.1kOhm"
+		(property "Value" "10kOhm"
 			(at 161.798 76.2 90)
 			(effects
 				(font
@@ -3036,7 +3036,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C23186"
+		(property "LCSC" "C25804"
 			(at 160.02 74.93 0)
 			(effects
 				(font
@@ -3225,7 +3225,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "5.1kOhm"
+		(property "Value" "10kOhm"
 			(at 143.764 76.2 90)
 			(effects
 				(font
@@ -3263,7 +3263,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C23186"
+		(property "LCSC" "C25804"
 			(at 153.67 74.93 0)
 			(effects
 				(font
@@ -3297,7 +3297,7 @@
 		(dnp yes)
 		(fields_autoplaced yes)
 		(uuid "65e64a21-0216-4578-8373-e6a4bdf3600e")
-		(property "Reference" "U3"
+		(property "Reference" "SW5"
 			(at 86.36 104.14 0)
 			(effects
 				(font
@@ -3369,7 +3369,7 @@
 		(instances
 			(project "memory_pcb"
 				(path "/0b554bab-2912-44e0-8d16-f1690413cb05/0b536339-25e4-48ce-a11a-b22c2b02a50f"
-					(reference "U3")
+					(reference "SW5")
 					(unit 1)
 				)
 			)
@@ -3685,7 +3685,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "5.1kOhm"
+		(property "Value" "10kOhm"
 			(at 72.39 104.1399 90)
 			(effects
 				(font
@@ -3723,7 +3723,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C23186"
+		(property "LCSC" "C25804"
 			(at 69.85 102.87 0)
 			(effects
 				(font
@@ -3825,7 +3825,7 @@
 		(dnp yes)
 		(fields_autoplaced yes)
 		(uuid "a3504887-2518-42c4-9295-f96e1ad2bccd")
-		(property "Reference" "SW1"
+		(property "Reference" "SW3"
 			(at 53.34 31.75 0)
 			(effects
 				(font
@@ -3877,7 +3877,7 @@
 		(instances
 			(project "memory_pcb"
 				(path "/0b554bab-2912-44e0-8d16-f1690413cb05/0b536339-25e4-48ce-a11a-b22c2b02a50f"
-					(reference "SW1")
+					(reference "SW3")
 					(unit 1)
 				)
 			)
@@ -4378,7 +4378,7 @@
 		(dnp yes)
 		(fields_autoplaced yes)
 		(uuid "c3b68195-6838-44b6-96cf-ead87aef662c")
-		(property "Reference" "SW2"
+		(property "Reference" "SW4"
 			(at 101.6 31.75 0)
 			(effects
 				(font
@@ -4430,7 +4430,7 @@
 		(instances
 			(project "memory_pcb"
 				(path "/0b554bab-2912-44e0-8d16-f1690413cb05/0b536339-25e4-48ce-a11a-b22c2b02a50f"
-					(reference "SW2")
+					(reference "SW4")
 					(unit 1)
 				)
 			)
@@ -4759,7 +4759,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "5.1kOhm"
+		(property "Value" "10kOhm"
 			(at 30.48 30.4801 90)
 			(effects
 				(font
@@ -4797,7 +4797,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C23186"
+		(property "LCSC" "C25804"
 			(at 33.02 31.75 0)
 			(effects
 				(font
