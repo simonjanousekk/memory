@@ -5506,6 +5506,12 @@
 		(uuid "2b12e6fc-c846-4686-85cb-90ec70547d23")
 	)
 	(junction
+		(at 248.92 146.05)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2e96da95-4af6-48c4-9617-a8d6ab651e7c")
+	)
+	(junction
 		(at 199.39 149.86)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5528,6 +5534,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "440ff7b7-3c74-4bbf-a45c-eb9142c5d6d6")
+	)
+	(junction
+		(at 245.11 46.99)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "4431068a-6e63-45be-a886-ed8b18c71be8")
 	)
 	(junction
 		(at 66.04 40.64)
@@ -5620,10 +5632,10 @@
 		(uuid "f33364b7-0bcd-4e73-8546-2e3016316204")
 	)
 	(junction
-		(at 247.65 146.05)
+		(at 245.11 39.37)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "f656579f-1e07-4601-b29d-244e8bdf5429")
+		(uuid "fb2308e8-8fb9-4881-ae67-dbe602478413")
 	)
 	(no_connect
 		(at 104.14 48.26)
@@ -6535,7 +6547,7 @@
 	)
 	(wire
 		(pts
-			(xy 247.65 140.97) (xy 260.35 140.97)
+			(xy 248.92 140.97) (xy 260.35 140.97)
 		)
 		(stroke
 			(width 0)
@@ -6795,6 +6807,16 @@
 	)
 	(wire
 		(pts
+			(xy 245.11 39.37) (xy 245.11 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7e9f4b90-3bb9-430c-8fcd-7dc3554a713f")
+	)
+	(wire
+		(pts
 			(xy 156.21 43.18) (xy 157.48 43.18)
 		)
 		(stroke
@@ -6845,6 +6867,16 @@
 	)
 	(wire
 		(pts
+			(xy 247.65 138.43) (xy 254 138.43)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "863ca551-e340-4516-940c-42a4b33b2aa1")
+	)
+	(wire
+		(pts
 			(xy 41.91 162.56) (xy 52.07 162.56)
 		)
 		(stroke
@@ -6852,6 +6884,16 @@
 			(type default)
 		)
 		(uuid "874c6c24-330d-49e7-b545-636516a5aa41")
+	)
+	(wire
+		(pts
+			(xy 245.11 44.45) (xy 245.11 46.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "890352fa-799e-44a3-8d57-6420f88585f8")
 	)
 	(wire
 		(pts
@@ -7225,7 +7267,7 @@
 	)
 	(wire
 		(pts
-			(xy 247.65 146.05) (xy 260.35 146.05)
+			(xy 247.65 146.05) (xy 248.92 146.05)
 		)
 		(stroke
 			(width 0)
@@ -7285,7 +7327,7 @@
 	)
 	(wire
 		(pts
-			(xy 247.65 140.97) (xy 247.65 146.05)
+			(xy 248.92 140.97) (xy 248.92 146.05)
 		)
 		(stroke
 			(width 0)
@@ -7692,6 +7734,16 @@
 			(type default)
 		)
 		(uuid "fe04f7e9-e952-4427-854d-817780d2dd59")
+	)
+	(wire
+		(pts
+			(xy 248.92 146.05) (xy 260.35 146.05)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "feba0fcc-1840-4db1-96b4-87f3184b581b")
 	)
 	(text "SPI FOR PSRAM\n"
 		(exclude_from_sim no)
@@ -13256,7 +13308,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 254 138.43 90)
+		(at 247.65 138.43 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -13264,7 +13316,7 @@
 		(dnp no)
 		(uuid "9d1644a4-1165-4f85-821c-49d08ed347f9")
 		(property "Reference" "TP2"
-			(at 244.094 138.43 90)
+			(at 237.744 138.43 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13272,7 +13324,7 @@
 			)
 		)
 		(property "Value" "D-"
-			(at 247.65 138.43 90)
+			(at 241.3 138.43 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13280,7 +13332,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 254 133.35 0)
+			(at 247.65 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13289,7 +13341,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 254 133.35 0)
+			(at 247.65 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13298,7 +13350,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 254 138.43 0)
+			(at 247.65 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
