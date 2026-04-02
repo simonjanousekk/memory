@@ -5,108 +5,6 @@
 	(uuid "0b554bab-2912-44e0-8d16-f1690413cb05")
 	(paper "A4")
 	(lib_symbols
-		(symbol "Connector:TestPoint"
-			(pin_numbers hide)
-			(pin_names
-				(offset 0.762) hide)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "TP"
-				(at 0 6.858 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "TestPoint"
-				(at 0 5.08 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 5.08 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 5.08 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "test point"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "test point tp"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "Pin* Test*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "TestPoint_0_1"
-				(circle
-					(center 0 3.302)
-					(radius 0.762)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "TestPoint_1_1"
-				(pin passive line
-					(at 0 0 90)
-					(length 2.54)
-					(name "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
 		(symbol "Connector_Generic:Conn_01x10"
 			(pin_names
 				(offset 1.016) hide)
@@ -5506,12 +5404,6 @@
 		(uuid "2b12e6fc-c846-4686-85cb-90ec70547d23")
 	)
 	(junction
-		(at 248.92 146.05)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "2e96da95-4af6-48c4-9617-a8d6ab651e7c")
-	)
-	(junction
 		(at 199.39 149.86)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5624,12 +5516,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "dfdf4414-6c42-4088-b1d9-4740d07ffb98")
-	)
-	(junction
-		(at 254 138.43)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "f33364b7-0bcd-4e73-8546-2e3016316204")
 	)
 	(junction
 		(at 245.11 39.37)
@@ -6867,16 +6753,6 @@
 	)
 	(wire
 		(pts
-			(xy 247.65 138.43) (xy 254 138.43)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "863ca551-e340-4516-940c-42a4b33b2aa1")
-	)
-	(wire
-		(pts
 			(xy 41.91 162.56) (xy 52.07 162.56)
 		)
 		(stroke
@@ -6914,16 +6790,6 @@
 			(type default)
 		)
 		(uuid "8c6471c8-f32f-43af-9a19-4b81311ea22a")
-	)
-	(wire
-		(pts
-			(xy 114.3 102.87) (xy 118.11 102.87)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8cd94aa8-6b09-45ca-99b1-36562d47c3f5")
 	)
 	(wire
 		(pts
@@ -7267,16 +7133,6 @@
 	)
 	(wire
 		(pts
-			(xy 247.65 146.05) (xy 248.92 146.05)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bea12afa-3784-4a88-ae2c-00b092ec4c50")
-	)
-	(wire
-		(pts
 			(xy 40.64 83.82) (xy 36.83 83.82)
 		)
 		(stroke
@@ -7354,6 +7210,16 @@
 			(type default)
 		)
 		(uuid "cc707fea-f61d-49c7-9e8c-3d42212074a8")
+	)
+	(wire
+		(pts
+			(xy 114.3 102.87) (xy 118.11 102.87)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cccd667f-ebfe-49da-8ca2-0bca4cd62fe6")
 	)
 	(wire
 		(pts
@@ -7697,6 +7563,16 @@
 	)
 	(wire
 		(pts
+			(xy 114.3 105.41) (xy 118.11 105.41)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fc47fe90-f173-4a74-8085-3688b5415b0b")
+	)
+	(wire
+		(pts
 			(xy 257.81 130.81) (xy 260.35 130.81)
 		)
 		(stroke
@@ -7724,16 +7600,6 @@
 			(type default)
 		)
 		(uuid "fd89aac5-c890-437b-bc13-b0485ec27c9f")
-	)
-	(wire
-		(pts
-			(xy 114.3 105.41) (xy 118.11 105.41)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "fe04f7e9-e952-4427-854d-817780d2dd59")
 	)
 	(wire
 		(pts
@@ -9176,70 +9042,6 @@
 			(project "memory_pcb"
 				(path "/0b554bab-2912-44e0-8d16-f1690413cb05"
 					(reference "#PWR01")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 247.65 146.05 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "24454add-6f51-4fcf-bbde-232d0780a0d8")
-		(property "Reference" "TP1"
-			(at 237.744 146.05 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "D+"
-			(at 241.3 146.05 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 247.65 140.97 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 247.65 140.97 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 247.65 146.05 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "0966a91b-13c2-47bf-a9e7-27e8c6647ab6")
-		)
-		(instances
-			(project "memory_pcb"
-				(path "/0b554bab-2912-44e0-8d16-f1690413cb05"
-					(reference "TP1")
 					(unit 1)
 				)
 			)
@@ -11323,7 +11125,7 @@
 	)
 	(symbol
 		(lib_id "power:+5V")
-		(at 114.3 105.41 90)
+		(at 114.3 102.87 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -11332,7 +11134,7 @@
 		(fields_autoplaced yes)
 		(uuid "6425e186-c9b0-49a0-9568-4bfa152a5cc2")
 		(property "Reference" "#PWR071"
-			(at 118.11 105.41 0)
+			(at 118.11 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11341,7 +11143,7 @@
 			)
 		)
 		(property "Value" "+5V"
-			(at 110.49 105.4099 90)
+			(at 110.49 102.8699 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11350,7 +11152,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 114.3 105.41 0)
+			(at 114.3 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11359,7 +11161,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 114.3 105.41 0)
+			(at 114.3 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11368,7 +11170,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+5V\""
-			(at 114.3 105.41 0)
+			(at 114.3 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13307,70 +13109,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 247.65 138.43 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "9d1644a4-1165-4f85-821c-49d08ed347f9")
-		(property "Reference" "TP2"
-			(at 237.744 138.43 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "D-"
-			(at 241.3 138.43 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 247.65 133.35 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 247.65 133.35 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 247.65 138.43 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "d3e45603-6286-4a96-b9b4-a829bf8e25a8")
-		)
-		(instances
-			(project "memory_pcb"
-				(path "/0b554bab-2912-44e0-8d16-f1690413cb05"
-					(reference "TP2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "new_lib_symbol:0603WAF5101T5E")
 		(at 22.86 102.87 90)
 		(unit 1)
@@ -15097,16 +14835,15 @@
 	)
 	(symbol
 		(lib_id "power:+3.3V")
-		(at 114.3 102.87 90)
+		(at 114.3 105.41 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "d3e169f0-2311-4f8c-b943-80b826e1a017")
 		(property "Reference" "#PWR069"
-			(at 118.11 102.87 0)
+			(at 118.11 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15115,7 +14852,7 @@
 			)
 		)
 		(property "Value" "+3.3V"
-			(at 110.49 102.8699 90)
+			(at 110.49 105.4099 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15124,7 +14861,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 114.3 102.87 0)
+			(at 114.3 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15133,7 +14870,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 114.3 102.87 0)
+			(at 114.3 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15142,7 +14879,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
-			(at 114.3 102.87 0)
+			(at 114.3 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
