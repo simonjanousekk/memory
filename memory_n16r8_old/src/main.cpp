@@ -24,7 +24,6 @@ unsigned long last_fgUpdate = 0;
 const unsigned long interval_fgUpdate = 1000; // 1 second
 
 void loop() {
-  input_read();
   input_update();
 
   unsigned long currentMicros = micros();
