@@ -1,0 +1,15 @@
+CompileFlags:
+  Remove:
+    - -mlongcalls
+    - -fstrict-volatile-bitfields
+    - -fno-tree-switch-conversion
+  Add:
+    - -mlong-calls
+    - --target=xtensa-esp32-elf
+
+Diagnostics:
+  ClangTidy:
+    Remove:
+      - misc-*
+  UnusedIncludes: None
+  MissingIncludes: None
