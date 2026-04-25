@@ -5,7 +5,7 @@
 
 #define BOB_FRAME_COUNT 80
 #define BOB_WIDTH 400
-#define BOB_HEIGHT 200
+#define BOB_HEIGHT 240
 #define BYTES_PER_FRAME 12000
 
 const uint8_t bob_data[BOB_FRAME_COUNT][BYTES_PER_FRAME] PROGMEM = {
