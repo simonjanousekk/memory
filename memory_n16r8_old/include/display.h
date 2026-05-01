@@ -87,36 +87,36 @@ void display_power(bool power) {
 }
 
 // Refresh rate tracking
-unsigned long _rr_frameCount = 0;
-unsigned long _rr_totalMicros = 0;
-float _rr_avgMs = 0;
+unsigned long _rr_frame_count = 0;
+unsigned long _rr_total_micros = 0;
+float _rr_avg_ms = 0;
 
-void refresh_rate_update(unsigned long refreshMicros) {
-  _rr_frameCount++;
-  _rr_totalMicros += refreshMicros;
-  if (_rr_frameCount >= 60) {
-    _rr_avgMs = (_rr_totalMicros / (float)_rr_frameCount) / 1000.0f;
-    _rr_frameCount = 0;
-    _rr_totalMicros = 0;
+void refresh_rate_update(unsigned long refresh_micros) {
+  _rr_frame_count++;
+  _rr_total_micros += refresh_micros;
+  if (_rr_frame_count >= 60) {
+    _rr_avg_ms = (_rr_total_micros / (float)_rr_frame_count) / 1000.0f;
+    _rr_frame_count = 0;
+    _rr_total_micros = 0;
   }
 }
 
 // Game update rate tracking
-unsigned long _gr_tickCount = 0;
-unsigned long _gr_windowStart = 0;
+unsigned long _gr_tick_count = 0;
+unsigned long _gr_window_start = 0;
 float _gr_tps = 0;
 
 void game_rate_update() {
   unsigned long now = micros();
-  if (_gr_windowStart == 0) {
-    _gr_windowStart = now;
+  if (_gr_window_start == 0) {
+    _gr_window_start = now;
     return;
   }
-  _gr_tickCount++;
-  if (_gr_tickCount >= 60) {
-    _gr_tps = 60000000.0f / (float)(now - _gr_windowStart);
-    _gr_windowStart = now;
-    _gr_tickCount = 0;
+  _gr_tick_count++;
+  if (_gr_tick_count >= 60) {
+    _gr_tps = 60000000.0f / (float)(now - _gr_window_start);
+    _gr_window_start = now;
+    _gr_tick_count = 0;
   }
 }
 
@@ -146,13 +146,6 @@ void draw_text_block(String text, int x, int y, bool color = WHITE, bool bg = tr
 int _debug_row_y(int row) {
   // Each debug overlay row: font_height + 2*border + 2px gap
   return (font_height + 4 + 2) * row + 1;
-}
-
-void refresh_rate_debug_display() {
-  char buf[40];
-  snprintf(buf, sizeof(buf), "%.1fms %.0fUPS %.0fFPS",
-           _rr_avgMs, 1000.0f / max(_rr_avgMs, 0.001f), _gr_tps);
-  draw_text_block(buf, 1, 18, WHITE);
 }
 
 #endif

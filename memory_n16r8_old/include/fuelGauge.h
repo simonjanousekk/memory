@@ -6,40 +6,40 @@
 #include <display.h>
 #include <sprites/battery.h>
 
-Adafruit_MAX17048 fuelGauge;
+Adafruit_MAX17048 fuel_gauge;
 
-float fuelGauge_voltage = 0;
-float fuelGauge_percentage = 0;
+float fuel_gauge_voltage = 0;
+float fuel_gauge_percentage = 0;
 
 int battery_levels[] = {17, 33, 50, 67, 83, 100};
 const uint8_t *battery_sprite = battery_100;
 
-void fuelGauge_init() {
+void fuel_gauge_init() {
   Wire.begin(4, 5);
-  while (!fuelGauge.begin()) {
+  while (!fuel_gauge.begin()) {
     Serial.println(F(
         "Couldnt find Adafruit MAX17048?\nMake sure a battery is plugged in!"));
     delay(2000);
   }
-  fuelGauge.quickStart();
+  fuel_gauge.quickStart();
 }
 
-void fuelGauge_update() {
-  fuelGauge_voltage = fuelGauge.cellVoltage();
-  fuelGauge_percentage = fuelGauge.cellPercent();
+void fuel_gauge_update() {
+  fuel_gauge_voltage = fuel_gauge.cellVoltage();
+  fuel_gauge_percentage = fuel_gauge.cellPercent();
 
   battery_sprite = battery_100;
   for (int i = 0; i < (sizeof(battery_levels) / sizeof(battery_levels[0])); i++) {
-    if (fuelGauge_percentage < battery_levels[i]) {
+    if (fuel_gauge_percentage < battery_levels[i]) {
       battery_sprite = battery_sprites[i];
       break;
     }
   }
 }
 
-void fuelGauge_debug_display() {
-  String fuelGauge_display_text = String(int(fuelGauge_percentage)) + "% " + String(fuelGauge_voltage) + "V";
-  draw_text_block(fuelGauge_display_text, 1, 1, WHITE);
+void fuel_gauge_debug_display() {
+  String text = String(int(fuel_gauge_percentage)) + "% " + String(fuel_gauge_voltage) + "V";
+  draw_text_block(text, 1, 1, WHITE);
 }
 
 void battery_display() {

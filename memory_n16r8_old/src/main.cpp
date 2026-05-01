@@ -7,75 +7,67 @@
 #include <sprites/bob.h>
 #include <sprites/zajac.h>
 
+// All render callbacks are now in scope — define the item list here.
+DebugMenuItem debug_items[] = {
+    DebugMenuItem("Fuel gauge", fuel_gauge_debug_display),
+    DebugMenuItem("Refresh rate", _dbg_render_refresh_rate),
+    DebugMenuItem("Input debug", debug_input_display),
+};
+
 void setup() {
   Serial.begin(115200);
-  delay(100); // Short delay to ensure serial is ready
+  delay(100);
+
+  debug_menu.init(debug_items, sizeof(debug_items) / sizeof(debug_items[0]));
 
   display_init();
   input_init();
   sleep_init();
-  fuelGauge_init();
-  fuelGauge_update();
+  fuel_gauge_init();
+  fuel_gauge_update();
 }
 
 uint16_t animation_index = 0;
-unsigned long last_gameUpdate = 0;
-const unsigned long interval_gameUpdate = 1000000 / 12; //83333; // 16.666ms (60fps)
+unsigned long last_game_update = 0;
+const unsigned long interval_game_update = 1000000 / 12;
 
-unsigned long last_fgUpdate = -9000;
-const unsigned long interval_fgUpdate = 10000; // 10 seconds
+unsigned long last_fg_update = -9000;
+const unsigned long interval_fg_update = 10000;
 
 void loop() {
+  unsigned long current_micros = micros();
+  unsigned long current_millis = millis();
+
   input_update();
 
-  unsigned long currentMicros = micros();
-  unsigned long currentMillis = millis();
-
-  if (currentMicros - last_gameUpdate >= interval_gameUpdate) {
-    last_gameUpdate = currentMicros;
+  if (current_micros - last_game_update >= interval_game_update) {
+    last_game_update = current_micros;
     animation_index++;
     game_rate_update();
   }
 
   display.clearDisplayBuffer();
-  ScreenMode screen = current_screen_mode();
 
-  if (currentMillis - last_fgUpdate >= interval_fgUpdate) {
-    last_fgUpdate = currentMillis;
-    fuelGauge_update();
+  if (current_millis - last_fg_update >= interval_fg_update) {
+    last_fg_update = current_millis;
+    fuel_gauge_update();
   }
 
-  if (screen == SCREEN_MODE_MAIN) {
+  if (debug_menu.screen_mode == SCREEN_MODE_MAIN) {
     if (zajac) {
-      display.drawBitmap(
-          SCREEN_WIDTH / 2 - ZAJAC_WIDTH / 2,
-          SCREEN_HEIGHT / 2 - ZAJAC_HEIGHT / 2,
-          zajac_data[animation_index % ZAJAC_FRAME_COUNT],
-          ZAJAC_WIDTH,
-          ZAJAC_HEIGHT,
-          0);
+      display.drawBitmap(SCREEN_WIDTH / 2 - ZAJAC_WIDTH / 2,
+                         SCREEN_HEIGHT / 2 - ZAJAC_HEIGHT / 2,
+                         zajac_data[animation_index % ZAJAC_FRAME_COUNT],
+                         ZAJAC_WIDTH, ZAJAC_HEIGHT, 0);
     } else {
-      display.drawBitmap(
-          0, 0,
-          bob_data[animation_index % BOB_FRAME_COUNT],
-          BOB_WIDTH,
-          BOB_HEIGHT,
-          1, 0);
+      display.drawBitmap(0, 0, bob_data[animation_index % BOB_FRAME_COUNT],
+                         BOB_WIDTH, BOB_HEIGHT, 1, 0);
     }
 
-    if (debug_menu_show_fuel_gauge()) {
-      fuelGauge_debug_display();
-    }
     battery_display();
-
-    if (debug_menu_show_input_debug()) {
-      debug_input_display();
-    }
-    if (debug_menu_show_refresh_rate()) {
-      refresh_rate_debug_display();
-    }
-  } else if (screen == SCREEN_MODE_DEBUG_MENU) {
-    debug_menu_display();
+    debug_menu.render_overlays();
+  } else if (debug_menu.screen_mode == SCREEN_MODE_DEBUG_MENU) {
+    debug_menu.draw();
   }
 
   unsigned long t0 = micros();
