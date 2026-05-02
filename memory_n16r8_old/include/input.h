@@ -4,8 +4,9 @@
 #include <Arduino.h>
 #include <ESP32Encoder.h>
 #include <OneButton.h>
-#include <debug_menu.h>
 #include <display.h>
+#include <screen.h>
+#include <screens/debug_menu_screen.h>
 #include <sleep_manager.h>
 
 // ENCODER DECLARATIONS
@@ -26,8 +27,7 @@ float encoder_value = 0;
 float last_encoder_value = 0;
 float debug_rotation = -PI / 2;
 
-//TMP
-bool zajac = false;
+static bool _ab_combo_fired = false;
 
 void input_init() {
   button_a.setup(PIN_BUTTON_A, INPUT, true);
@@ -43,24 +43,38 @@ void input_init() {
   encoder.attachHalfQuad(PIN_ENCODER_A, PIN_ENCODER_B);
 
   button_p.attachPress([]() { sleep_sleep(PIN_BUTTON_P); });
+
   button_a.attachPress([]() {
-    if (debug_menu.is_open()) {
+    if (currentScreen->id() == SCREEN_DEBUG_MENU)
       debug_menu.confirm_selected();
-    } else {
-      zajac = !zajac;
+  });
+
+  // A+B held → toggle debug menu, returning to the screen you came from.
+  // Guard flag prevents both long-press callbacks firing and toggling back.
+  button_a.attachLongPressStart([]() {
+    if (!_ab_combo_fired && digitalRead(PIN_BUTTON_B) == LOW) {
+      _ab_combo_fired = true;
+      toggle_debug_menu();
     }
   });
+  button_b.attachLongPressStart([]() {
+    if (!_ab_combo_fired && digitalRead(PIN_BUTTON_A) == LOW) {
+      _ab_combo_fired = true;
+      toggle_debug_menu();
+    }
+  });
+
   button_b.attachPress([]() {
-    if (debug_menu.is_open()) {
-      debug_menu.exit();
-    }
+    if (currentScreen->id() == SCREEN_DEBUG_MENU)
+      toggle_debug_menu();
   });
+
   button_e.attachPress([]() {
-    if (debug_menu.is_open()) {
+    if (currentScreen->id() == SCREEN_DEBUG_MENU)
       debug_menu.confirm_selected();
-    }
   });
-  button_e.attachLongPressStart([]() { debug_menu.enter_or_exit(); });
+
+  button_e.attachLongPressStart([]() { cycle_screen(); });
 }
 
 void input_update() {
@@ -69,10 +83,14 @@ void input_update() {
   button_p.tick();
   button_e.tick();
 
+  if (digitalRead(PIN_BUTTON_A) != LOW && digitalRead(PIN_BUTTON_B) != LOW)
+    _ab_combo_fired = false;
+
   encoder_value = encoder.getCount();
   int encoder_delta = int(encoder_value - last_encoder_value);
   debug_rotation -= float(encoder_delta) * 0.2094395102f;
-  debug_menu.encoder_step(-encoder_delta);
+  if (currentScreen->id() == SCREEN_DEBUG_MENU)
+    debug_menu.encoder_step(-encoder_delta);
   last_encoder_value = encoder_value;
 }
 
@@ -91,12 +109,11 @@ void debug_input_display() {
   debug_input_button(25, SCREEN_HEIGHT - 50, button_b.debouncedValue() == 0);
 
   // ENCODER
-  debug_input_button(SCREEN_WIDTH - 25, SCREEN_HEIGHT / 2, button_e.debouncedValue() == 0);
+  debug_input_button(SCREEN_WIDTH - 25, SCREEN_HEIGHT / 2,
+                     button_e.debouncedValue() == 0);
 
-  display.fillCircle(
-      SCREEN_WIDTH - 25 + cos(debug_rotation) * 20,
-      SCREEN_HEIGHT / 2 + sin(debug_rotation) * 20,
-      5, BLACK);
+  display.fillCircle(SCREEN_WIDTH - 25 + cos(debug_rotation) * 20,
+                     SCREEN_HEIGHT / 2 + sin(debug_rotation) * 20, 5, BLACK);
 }
 
 #endif

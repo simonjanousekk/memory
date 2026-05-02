@@ -1,13 +1,42 @@
 #include <Arduino.h>
-#include <debug_menu.h>
+
 #include <display.h>
 #include <fuelGauge.h>
 #include <input.h>
+#include <screen.h>
+#include <screens/bob_screen.h>
+#include <screens/debug_menu_screen.h>
+#include <screens/grid_screen.h>
+#include <screens/zajac_screen.h>
 #include <sleep_manager.h>
-#include <sprites/bob.h>
-#include <sprites/zajac.h>
 
-// All render callbacks are now in scope — define the item list here.
+// ---------------------------------------------------------------------------
+// Screen instances — add a new screen here and in set_screen() below.
+// ---------------------------------------------------------------------------
+BobScreen screen_bob;
+ZajacScreen screen_zajac;
+DebugMenuScreen screen_debug;
+GridScreen screen_grid;
+
+// ---------------------------------------------------------------------------
+// Global state — currentScreen is extern-declared in screen.h.
+// ---------------------------------------------------------------------------
+Screen *currentScreen = &screen_bob;
+
+void set_screen(ScreenMode mode) {
+  currentScreen->on_exit();
+  switch (mode) {
+    case SCREEN_BOB:        currentScreen = &screen_bob;   break;
+    case SCREEN_ZAJAC:      currentScreen = &screen_zajac; break;
+    case SCREEN_DEBUG_MENU: currentScreen = &screen_debug; break;
+    case SCREEN_GRID:       currentScreen = &screen_grid;  break;
+  }
+  currentScreen->on_enter();
+}
+
+// ---------------------------------------------------------------------------
+// Debug menu items — all render callbacks must be in scope at this point.
+// ---------------------------------------------------------------------------
 DebugMenuItem debug_items[] = {
     DebugMenuItem("Fuel gauge", fuel_gauge_debug_display),
     DebugMenuItem("Refresh rate", _dbg_render_refresh_rate),
@@ -27,7 +56,6 @@ void setup() {
   fuel_gauge_update();
 }
 
-uint16_t animation_index = 0;
 unsigned long last_game_update = 0;
 const unsigned long interval_game_update = 1000000 / 12;
 
@@ -42,7 +70,7 @@ void loop() {
 
   if (current_micros - last_game_update >= interval_game_update) {
     last_game_update = current_micros;
-    animation_index++;
+    currentScreen->update();
     game_rate_update();
   }
 
@@ -53,21 +81,11 @@ void loop() {
     fuel_gauge_update();
   }
 
-  if (debug_menu.screen_mode == SCREEN_MODE_MAIN) {
-    if (zajac) {
-      display.drawBitmap(SCREEN_WIDTH / 2 - ZAJAC_WIDTH / 2,
-                         SCREEN_HEIGHT / 2 - ZAJAC_HEIGHT / 2,
-                         zajac_data[animation_index % ZAJAC_FRAME_COUNT],
-                         ZAJAC_WIDTH, ZAJAC_HEIGHT, 0);
-    } else {
-      display.drawBitmap(0, 0, bob_data[animation_index % BOB_FRAME_COUNT],
-                         BOB_WIDTH, BOB_HEIGHT, 1, 0);
-    }
+  currentScreen->draw();
 
+  if (currentScreen->id() != SCREEN_DEBUG_MENU) {
     battery_display();
     debug_menu.render_overlays();
-  } else if (debug_menu.screen_mode == SCREEN_MODE_DEBUG_MENU) {
-    debug_menu.draw();
   }
 
   unsigned long t0 = micros();
