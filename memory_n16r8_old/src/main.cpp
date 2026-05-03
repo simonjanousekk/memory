@@ -21,16 +21,25 @@ GridScreen screen_grid;
 // ---------------------------------------------------------------------------
 // Global state — currentScreen is extern-declared in screen.h.
 // ---------------------------------------------------------------------------
-Screen *currentScreen = &screen_bob;
+Screen *currentScreen = &screen_grid;
 
 void set_screen(ScreenMode mode) {
   currentScreen->on_exit();
   switch (mode) {
-    case SCREEN_BOB:        currentScreen = &screen_bob;   break;
-    case SCREEN_ZAJAC:      currentScreen = &screen_zajac; break;
-    case SCREEN_DEBUG_MENU: currentScreen = &screen_debug; break;
-    case SCREEN_GRID:       currentScreen = &screen_grid;  break;
+  case SCREEN_BOB:
+    currentScreen = &screen_bob;
+    break;
+  case SCREEN_ZAJAC:
+    currentScreen = &screen_zajac;
+    break;
+  case SCREEN_DEBUG_MENU:
+    currentScreen = &screen_debug;
+    break;
+  case SCREEN_GRID:
+    currentScreen = &screen_grid;
+    break;
   }
+  currentScreen->ensure_init();
   currentScreen->on_enter();
 }
 
@@ -50,6 +59,7 @@ void setup() {
   debug_menu.init(debug_items, sizeof(debug_items) / sizeof(debug_items[0]));
 
   display_init();
+  currentScreen->ensure_init();
   input_init();
   sleep_init();
   fuel_gauge_init();

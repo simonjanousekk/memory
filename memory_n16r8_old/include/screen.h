@@ -16,13 +16,25 @@ enum ScreenMode {
 // Subclass it, override what you need, register an instance in main.cpp.
 // ---------------------------------------------------------------------------
 class Screen {
+  bool _initialized = false;
+
 public:
   virtual ~Screen() {}
-  virtual ScreenMode id() const = 0;   // identity — avoids a redundant global
-  virtual void on_enter() {}           // called once when screen becomes active
-  virtual void on_exit() {}            // called once when screen is left
+  virtual ScreenMode id() const = 0;
+  virtual void on_init() {}            // called once ever, before first on_enter
+  virtual void on_enter() {}           // called every time screen becomes active
+  virtual void on_exit() {}            // called every time screen is left
   virtual void update() {}             // called on every game tick
   virtual void draw() = 0;            // called every render frame
+
+  virtual void on_button_a() {}
+  virtual void on_button_b() {}
+  virtual void on_encoder_press() {}
+  virtual void on_encoder_rotate(int delta) {}
+
+  void ensure_init() {
+    if (!_initialized) { _initialized = true; on_init(); }
+  }
 };
 
 extern Screen *currentScreen;

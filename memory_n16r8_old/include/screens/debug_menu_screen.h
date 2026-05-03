@@ -113,6 +113,10 @@ class DebugMenuScreen : public Screen {
 public:
   ScreenMode id() const override { return SCREEN_DEBUG_MENU; }
   void draw() override { debug_menu.draw(); }
+  void on_button_a() override { debug_menu.confirm_selected(); }
+  void on_button_b() override { toggle_debug_menu(); }
+  void on_encoder_press() override { debug_menu.confirm_selected(); }
+  void on_encoder_rotate(int delta) override { debug_menu.encoder_step(delta); }
 };
 
 #endif

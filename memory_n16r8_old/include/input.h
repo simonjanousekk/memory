@@ -6,7 +6,6 @@
 #include <OneButton.h>
 #include <display.h>
 #include <screen.h>
-#include <screens/debug_menu_screen.h>
 #include <sleep_manager.h>
 
 // ENCODER DECLARATIONS
@@ -44,10 +43,7 @@ void input_init() {
 
   button_p.attachPress([]() { sleep_sleep(PIN_BUTTON_P); });
 
-  button_a.attachPress([]() {
-    if (currentScreen->id() == SCREEN_DEBUG_MENU)
-      debug_menu.confirm_selected();
-  });
+  button_a.attachPress([]() { currentScreen->on_button_a(); });
 
   // A+B held → toggle debug menu, returning to the screen you came from.
   // Guard flag prevents both long-press callbacks firing and toggling back.
@@ -64,15 +60,9 @@ void input_init() {
     }
   });
 
-  button_b.attachPress([]() {
-    if (currentScreen->id() == SCREEN_DEBUG_MENU)
-      toggle_debug_menu();
-  });
+  button_b.attachPress([]() { currentScreen->on_button_b(); });
 
-  button_e.attachPress([]() {
-    if (currentScreen->id() == SCREEN_DEBUG_MENU)
-      debug_menu.confirm_selected();
-  });
+  button_e.attachPress([]() { currentScreen->on_encoder_press(); });
 
   button_e.attachLongPressStart([]() { cycle_screen(); });
 }
@@ -89,8 +79,7 @@ void input_update() {
   encoder_value = encoder.getCount();
   int encoder_delta = int(encoder_value - last_encoder_value);
   debug_rotation -= float(encoder_delta) * 0.2094395102f;
-  if (currentScreen->id() == SCREEN_DEBUG_MENU)
-    debug_menu.encoder_step(-encoder_delta);
+  currentScreen->on_encoder_rotate(-encoder_delta);
   last_encoder_value = encoder_value;
 }
 
