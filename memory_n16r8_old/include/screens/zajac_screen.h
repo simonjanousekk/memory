@@ -3,7 +3,7 @@
 
 #include <display.h>
 #include <screen.h>
-#include <sprites/zajac.h>
+#include <sprites/zajac_sprites.h>
 
 class ZajacScreen : public Screen {
   uint16_t _animation_index = 0;

@@ -4,7 +4,7 @@
 #include "Adafruit_MAX1704X.h"
 #include <Arduino.h>
 #include <display.h>
-#include <sprites/battery.h>
+#include <sprites/battery_sprites.h>
 
 Adafruit_MAX17048 fuel_gauge;
 
@@ -29,7 +29,8 @@ void fuel_gauge_update() {
   fuel_gauge_percentage = fuel_gauge.cellPercent();
 
   battery_sprite = battery_100;
-  for (int i = 0; i < (sizeof(battery_levels) / sizeof(battery_levels[0])); i++) {
+  for (int i = 0; i < (sizeof(battery_levels) / sizeof(battery_levels[0]));
+       i++) {
     if (fuel_gauge_percentage < battery_levels[i]) {
       battery_sprite = battery_sprites[i];
       break;
@@ -38,11 +39,13 @@ void fuel_gauge_update() {
 }
 
 void fuel_gauge_debug_display() {
-  String text = String(int(fuel_gauge_percentage)) + "% " + String(fuel_gauge_voltage) + "V";
+  String text = String(int(fuel_gauge_percentage)) + "% " +
+                String(fuel_gauge_voltage) + "V";
   draw_text_block(text, 1, 1, WHITE);
 }
 
 void battery_display() {
-  display.drawBitmap(SCREEN_WIDTH - 24 - 5, 5, battery_sprite, 24, 16, BLACK, WHITE);
+  display.drawBitmap(SCREEN_WIDTH - 24 - 5, 5, battery_sprite, 24, 16, BLACK,
+                     WHITE);
 }
 #endif

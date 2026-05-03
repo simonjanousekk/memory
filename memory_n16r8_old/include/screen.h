@@ -21,11 +21,11 @@ class Screen {
 public:
   virtual ~Screen() {}
   virtual ScreenMode id() const = 0;
-  virtual void on_init() {}            // called once ever, before first on_enter
-  virtual void on_enter() {}           // called every time screen becomes active
-  virtual void on_exit() {}            // called every time screen is left
-  virtual void update() {}             // called on every game tick
-  virtual void draw() = 0;            // called every render frame
+  virtual void on_init() {}  // called once ever, before first on_enter
+  virtual void on_enter() {} // called every time screen becomes active
+  virtual void on_exit() {}  // called every time screen is left
+  virtual void update() {}   // called on every game tick
+  virtual void draw() = 0;   // called every render frame
 
   virtual void on_button_a() {}
   virtual void on_button_b() {}
@@ -33,7 +33,10 @@ public:
   virtual void on_encoder_rotate(int delta) {}
 
   void ensure_init() {
-    if (!_initialized) { _initialized = true; on_init(); }
+    if (!_initialized) {
+      _initialized = true;
+      on_init();
+    }
   }
 };
 
@@ -59,11 +62,14 @@ void toggle_debug_menu() {
 }
 
 void cycle_screen() {
-  static const ScreenMode cycle[] = { SCREEN_BOB, SCREEN_ZAJAC, SCREEN_GRID };
+  static const ScreenMode cycle[] = {SCREEN_BOB, SCREEN_ZAJAC, SCREEN_GRID};
   static const int n = sizeof(cycle) / sizeof(cycle[0]);
   ScreenMode cur = currentScreen->id();
   for (int i = 0; i < n; i++) {
-    if (cycle[i] == cur) { set_screen(cycle[(i + 1) % n]); return; }
+    if (cycle[i] == cur) {
+      set_screen(cycle[(i + 1) % n]);
+      return;
+    }
   }
   set_screen(cycle[0]); // fallback from debug menu or unknown
 }

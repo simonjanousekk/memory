@@ -43,8 +43,6 @@ void input_init() {
 
   button_p.attachPress([]() { sleep_sleep(PIN_BUTTON_P); });
 
-  button_a.attachPress([]() { currentScreen->on_button_a(); });
-
   // A+B held → toggle debug menu, returning to the screen you came from.
   // Guard flag prevents both long-press callbacks firing and toggling back.
   button_a.attachLongPressStart([]() {
@@ -60,11 +58,12 @@ void input_init() {
     }
   });
 
+  button_a.attachPress([]() { currentScreen->on_button_a(); });
   button_b.attachPress([]() { currentScreen->on_button_b(); });
 
-  button_e.attachPress([]() { currentScreen->on_encoder_press(); });
-
-  button_e.attachLongPressStart([]() { cycle_screen(); });
+  // button_e.attachPress([]() { currentScreen->on_encoder_press(); });
+  // button_e.attachLongPressStart([]() { cycle_screen(); });
+  button_e.attachPress([]() { cycle_screen(); });
 }
 
 void input_update() {
@@ -79,7 +78,9 @@ void input_update() {
   encoder_value = encoder.getCount();
   int encoder_delta = int(encoder_value - last_encoder_value);
   debug_rotation -= float(encoder_delta) * 0.2094395102f;
-  currentScreen->on_encoder_rotate(-encoder_delta);
+  if (encoder_delta != 0) {
+    currentScreen->on_encoder_rotate(-encoder_delta);
+  }
   last_encoder_value = encoder_value;
 }
 
