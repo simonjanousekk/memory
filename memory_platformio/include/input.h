@@ -93,12 +93,11 @@ void debug_input_button(int x, int y, bool state) {
   }
 }
 
-void debug_input_display() {
-  // BUTTONS
+void debug_input_display(char * /*buf*/, int /*len*/) {
+  // Graphics overlay — draws directly, buffer intentionally left empty.
   debug_input_button(25, 50, button_a.debouncedValue() == 0);
   debug_input_button(25, SCREEN_HEIGHT - 50, button_b.debouncedValue() == 0);
 
-  // ENCODER
   debug_input_button(SCREEN_WIDTH - 25, SCREEN_HEIGHT / 2,
                      button_e.debouncedValue() == 0);
 

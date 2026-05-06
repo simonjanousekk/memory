@@ -38,10 +38,9 @@ void fuel_gauge_update() {
   }
 }
 
-void fuel_gauge_debug_display() {
-  String text = String(int(fuel_gauge_percentage)) + "% " +
-                String(fuel_gauge_voltage) + "V";
-  draw_text_block(text, 1, 1, WHITE);
+void fuel_gauge_debug_display(char *buf, int len) {
+  snprintf(buf, len, "%d%% %.2fV", int(fuel_gauge_percentage),
+           fuel_gauge_voltage);
 }
 
 void battery_display() {

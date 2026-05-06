@@ -9,6 +9,7 @@
 #include <screens/grid_screen.h>
 #include <screens/zajac_screen.h>
 #include <sleep_manager.h>
+#include <wifi/wifi_manager.h>
 
 // ---------------------------------------------------------------------------
 // Screen instances — add a new screen here and in set_screen() below.
@@ -50,6 +51,8 @@ DebugMenuItem debug_items[] = {
     DebugMenuItem("Fuel gauge", fuel_gauge_debug_display),
     DebugMenuItem("Refresh rate", _dbg_render_refresh_rate),
     DebugMenuItem("Input debug", debug_input_display),
+    DebugMenuItem("WiFi", nullptr, wifi_manager_start, wifi_manager_reset),
+    DebugMenuItem("WiFi debug", wifi_debug_display),
 };
 
 void setup() {
@@ -77,6 +80,7 @@ void loop() {
   unsigned long current_millis = millis();
 
   input_update();
+  wifi_manager_update();
 
   if (current_micros - last_game_update >= interval_game_update) {
     last_game_update = current_micros;

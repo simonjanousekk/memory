@@ -7,11 +7,9 @@
 
 // Render callback for the "Refresh rate" debug item.
 // Lives here because it reads _rr_avg_ms / _gr_tps from display.h.
-static void _dbg_render_refresh_rate() {
-  char buf[40];
-  snprintf(buf, sizeof(buf), "%.1fms %.0fUPS %.0fFPS", _rr_avg_ms,
+static void _dbg_render_refresh_rate(char *buf, int len) {
+  snprintf(buf, len, "%.1fms %.0fUPS %.0fFPS", _rr_avg_ms,
            1000.0f / max(_rr_avg_ms, 0.001f), _gr_tps);
-  draw_text_block(buf, 1, 18, WHITE);
 }
 
 // ---------------------------------------------------------------------------
@@ -21,37 +19,48 @@ class DebugMenuItem {
 public:
   const char *label;
   bool enabled;
-  void (*render)();
+  void (*render)(char *buf, int len);
+  void (*on_enable)();
+  void (*on_disable)();
 
-  DebugMenuItem() : label(""), enabled(false), render(nullptr) {}
-  DebugMenuItem(const char *label, void (*render)() = nullptr)
-      : label(label), enabled(false), render(render) {}
+  DebugMenuItem()
+      : label(""), enabled(false), render(nullptr), on_enable(nullptr),
+        on_disable(nullptr) {}
+  DebugMenuItem(const char *label, void (*render)(char *buf, int len) = nullptr,
+                void (*on_enable)() = nullptr, void (*on_disable)() = nullptr)
+      : label(label), enabled(false), render(render), on_enable(on_enable),
+        on_disable(on_disable) {}
 
-  void toggle() { enabled = !enabled; }
+  void toggle() {
+    enabled = !enabled;
+    if (enabled && on_enable)
+      on_enable();
+    if (!enabled && on_disable)
+      on_disable();
+  }
 
-  void draw_row(int y, bool selected) const {
+  void draw_row(int x, int y, bool selected) const {
     if (selected) {
-      char sample[64];
-      snprintf(sample, sizeof(sample), "> %s: ON", label);
-      int16_t x1, y1;
-      uint16_t w, h;
-      display.setTextSize(1);
-      display.getTextBounds(sample, 40, y, &x1, &y1, &w, &h);
-      display.fillRect(30, y1 - 2, SCREEN_WIDTH - 60, h + 4, BLACK);
+      // char sample[64];
+      // snprintf(sample, sizeof(sample), "> %s: ON", label);
+      // int16_t x1, y1;
+      // uint16_t w, h;
+      // display.setTextSize(1);
+      // display.getTextBounds(sample, 40, y, &x1, &y1, &w, &h);
+      // display.fillRect(30, y1 - 2, SCREEN_WIDTH - 60, h + 4, BLACK);
+      display.fillRect(x, y - font_height, SCREEN_WIDTH_HALF, font_height + 6,
+                       BLACK);
       display.setTextColor(WHITE);
     } else {
       display.setTextColor(BLACK);
     }
-    display.setCursor(40, y);
-    display.print(selected ? "> " : "  ");
+    display.setCursor(x, y);
+    // display.print(selected ? "> " : "  ");
+
     display.print(label);
     display.print(": ");
+    display.setCursor(SCREEN_WIDTH_HALF - 35, y);
     display.print(enabled ? "ON" : "OFF");
-  }
-
-  void render_overlay() const {
-    if (enabled && render)
-      render();
   }
 };
 
@@ -85,21 +94,31 @@ public:
   void render_overlays() const {
     if (!items)
       return;
-    for (int i = 0; i < item_count; i++)
-      items[i].render_overlay();
+    char buf[64];
+    int y = 1;
+    for (int i = 0; i < item_count; i++) {
+      if (!items[i].enabled || !items[i].render)
+        continue;
+      buf[0] = '\0';
+      items[i].render(buf, sizeof(buf));
+      if (buf[0] != '\0') {
+        draw_text_block(buf, 1, y, WHITE);
+        y += font_height + 6; // box height (font + 2*border) + 2px gap
+      }
+    }
   }
 
   void draw() const {
-    display.drawRect(20, 20, SCREEN_WIDTH - 40, SCREEN_HEIGHT - 40, BLACK);
+    // display.drawRect(20, 20, SCREEN_WIDTH - 40, SCREEN_HEIGHT - 40, BLACK);
     display.setTextSize(1);
     display.setTextColor(BLACK);
-    display.setCursor(40, 40);
-    display.print("DEBUG MENU");
-
-    int row_y = 80;
+    // display.setCursor(40, 40);
+    // display.print("DEBUG MENU");
+    int border = 5;
+    int row_y = font_height + border;
     for (int i = 0; i < item_count; i++) {
-      items[i].draw_row(row_y, i == selected_index);
-      row_y += 30;
+      items[i].draw_row(border, row_y, i == selected_index);
+      row_y += font_height + 6;
     }
   }
 };

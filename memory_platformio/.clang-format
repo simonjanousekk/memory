@@ -6,7 +6,11 @@ Language: Cpp
 ColumnLimit: 9999
 ReflowComments: false
 
-AllowAllArgumentsOnNextLine: true
-AllowAllParametersOnNextLine: true
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOnNextLine: false
 BinPackArguments: true
 BinPackParameters: true
+
+# Strongly discourage wrapping long call sites / signatures.
+PenaltyBreakBeforeFirstCallParameter: 1000000
+PenaltyBreakParameter: 1000000

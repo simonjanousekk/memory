@@ -10,6 +10,9 @@
 #define SCREEN_WIDTH 400
 #define SCREEN_HEIGHT 240
 
+#define SCREEN_WIDTH_HALF 200
+#define SCREEN_HEIGHT_HALF 120
+
 #define PIN_DISPLAY_SCK 12
 #define PIN_DISPLAY_MOSI 11
 #define PIN_DISPLAY_SS 10
@@ -18,7 +21,8 @@
 #define WHITE 1
 #define BLACK 0
 
-Adafruit_SharpMem display(&SPI, PIN_DISPLAY_SS, SCREEN_WIDTH, SCREEN_HEIGHT, 2000000);
+Adafruit_SharpMem display(&SPI, PIN_DISPLAY_SS, SCREEN_WIDTH, SCREEN_HEIGHT,
+                          2000000);
 
 // Shadow buffer for dirty-line tracking
 static uint8_t *_shadow_buffer = nullptr;
@@ -29,7 +33,7 @@ void display_init() {
   SPI.begin(PIN_DISPLAY_SCK, /*MISO*/ -1, PIN_DISPLAY_MOSI, /*SS*/ -1);
   display.begin();
   display.clearDisplay();
-  display.setFont(&FreeMonoBold9pt7b);
+  // display.setFont(&FreeMonoBold9pt7b);
   // Get the font height by measuring text bounds for "A"
   int16_t x1, y1;
   uint16_t w, h;
@@ -122,7 +126,8 @@ void game_rate_update() {
 
 // (x, y) = top-left corner of the outer box (border included).
 // Text is inset by `border` pixels on all sides.
-void draw_text_block(String text, int x, int y, bool color = WHITE, bool bg = true, int border = 2) {
+void draw_text_block(String text, int x, int y, bool color = WHITE,
+                     bool bg = true, int border = 2) {
   int16_t x1, y1;
   uint16_t w, h;
 
