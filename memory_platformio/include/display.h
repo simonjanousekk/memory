@@ -1,10 +1,14 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
-#include <Adafruit_SharpMem.h>
+#include <Adafruit_GFX.h>
 #include <Arduino.h>
 #include <Fonts/FreeMonoBold9pt7b.h>
 #include <SPI.h>
+
+#define SHARPMEM_BIT_WRITECMD 0x01
+#define SHARPMEM_BIT_VCOM 0x02
+#define SHARPMEM_BIT_CLEAR 0x04
 
 // DISPLAY DECLARATIONS
 #define SCREEN_WIDTH 400
@@ -21,8 +25,17 @@
 #define WHITE 1
 #define BLACK 0
 
-Adafruit_SharpMem display(&SPI, PIN_DISPLAY_SS, SCREEN_WIDTH, SCREEN_HEIGHT,
-                          2000000);
+GFXcanvas1 display(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+// GFXcanvas1 stores pixels MSB-first (bit 7 = pixel x=0), but the Sharp
+// display protocol expects LSB-first on the wire. Reverse each byte before
+// transmission so both match.
+inline uint8_t _reverse_byte(uint8_t b) {
+  b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
+  b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
+  b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
+  return b;
+}
 
 // Shadow buffer for dirty-line tracking
 static uint8_t *_shadow_buffer = nullptr;
@@ -31,8 +44,19 @@ static int font_height;
 
 void display_init() {
   SPI.begin(PIN_DISPLAY_SCK, /*MISO*/ -1, PIN_DISPLAY_MOSI, /*SS*/ -1);
-  display.begin();
-  display.clearDisplay();
+  pinMode(PIN_DISPLAY_SS, OUTPUT);
+  digitalWrite(PIN_DISPLAY_SS, LOW);
+
+  display.fillScreen(WHITE);
+
+  // Send hardware clear command to the Sharp display
+  SPI.beginTransaction(SPISettings(2000000, LSBFIRST, SPI_MODE0));
+  digitalWrite(PIN_DISPLAY_SS, HIGH);
+  SPI.write(_display_vcom | SHARPMEM_BIT_CLEAR);
+  SPI.write(0x00);
+  digitalWrite(PIN_DISPLAY_SS, LOW);
+  SPI.endTransaction();
+  _display_vcom = _display_vcom ? 0x00 : SHARPMEM_BIT_VCOM;
   // display.setFont(&FreeMonoBold9pt7b);
   // Get the font height by measuring text bounds for "A"
   int16_t x1, y1;
@@ -54,9 +78,27 @@ void display_init() {
 // call as required by the Sharp spec (prevents DC bias damage).
 void display_refresh_dirty() {
   if (!_shadow_buffer) {
-    display.refresh();
+    // Fallback: send all lines without dirty tracking
+    uint8_t *buf = display.getBuffer();
+    const uint16_t bpl = SCREEN_WIDTH / 8;
+    SPI.beginTransaction(SPISettings(8000000, LSBFIRST, SPI_MODE0));
+    digitalWrite(PIN_DISPLAY_SS, HIGH);
+    SPI.write(_display_vcom | SHARPMEM_BIT_WRITECMD);
+    _display_vcom = _display_vcom ? 0x00 : SHARPMEM_BIT_VCOM;
+    uint8_t line_buf[bpl];
+    for (uint16_t line = 0; line < SCREEN_HEIGHT; line++) {
+      uint8_t *src = buf + line * bpl;
+      for (uint16_t b = 0; b < bpl; b++)
+        line_buf[b] = _reverse_byte(src[b]);
+      SPI.write(line + 1);
+      SPI.writeBytes(line_buf, bpl);
+      SPI.write(0x00);
+    }
+    SPI.write(0x00);
+    digitalWrite(PIN_DISPLAY_SS, LOW);
+    SPI.endTransaction();
     return;
-  } // safe fallback
+  }
 
   uint8_t *buf = display.getBuffer();
   const uint16_t bpl = SCREEN_WIDTH / 8; // bytes per line
@@ -67,16 +109,19 @@ void display_refresh_dirty() {
   SPI.write(_display_vcom | SHARPMEM_BIT_WRITECMD);
   _display_vcom = _display_vcom ? 0x00 : SHARPMEM_BIT_VCOM;
 
+  uint8_t line_buf[bpl];
   for (uint16_t line = 0; line < SCREEN_HEIGHT; line++) {
     uint8_t *cur = buf + line * bpl;
     uint8_t *shd = _shadow_buffer + line * bpl;
     if (memcmp(cur, shd, bpl) == 0)
       continue;
 
-    SPI.write(line + 1);      // 1-indexed line address
-    SPI.writeBytes(cur, bpl); // pixel data (write-only, no buffer corruption)
-    SPI.write(0x00);          // line trailer
-    memcpy(shd, cur, bpl);    // update shadow
+    for (uint16_t b = 0; b < bpl; b++)
+      line_buf[b] = _reverse_byte(cur[b]);
+    SPI.write(line + 1);           // 1-indexed line address
+    SPI.writeBytes(line_buf, bpl); // bit-reversed pixel data
+    SPI.write(0x00);               // line trailer
+    memcpy(shd, cur, bpl);         // shadow tracks raw canvas bytes
   }
 
   SPI.write(0x00); // frame trailer
@@ -85,7 +130,7 @@ void display_refresh_dirty() {
 }
 
 void display_power(bool power) {
-  display.clearDisplayBuffer();
+  display.fillScreen(WHITE);
   display_refresh_dirty();
   digitalWrite(PIN_DISPLAY_ON, power ? HIGH : LOW);
 }

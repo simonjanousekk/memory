@@ -88,7 +88,7 @@ void loop() {
     game_rate_update();
   }
 
-  display.clearDisplayBuffer();
+  display.fillScreen(WHITE);
 
   if (current_millis - last_fg_update >= interval_fg_update) {
     last_fg_update = current_millis;
