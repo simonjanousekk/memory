@@ -25,7 +25,74 @@
 #define WHITE 1
 #define BLACK 0
 
-GFXcanvas1 display(SCREEN_WIDTH, SCREEN_HEIGHT);
+// GFXcanvas1 extended with thick-line drawing.
+class ExtGFXcanvas1 : public GFXcanvas1 {
+public:
+  ExtGFXcanvas1(uint16_t w, uint16_t h) : GFXcanvas1(w, h) {}
+
+  // Draws a thick line from (x0,y0) to (x1,y1) with true constant width at
+  // every angle. For each scanline in the bounding box it finds the horizontal
+  // run of pixels whose distance to the nearest point on the segment is ≤
+  // weight/2, then fills it with drawFastHLine. The shape is a "stadium"
+  // (rectangle + two semicircular caps), so round caps are free.
+  // Pass caps=false to skip the semicircular ends (e.g. for polyline joints).
+  void drawLineThick(int16_t x0, int16_t y0, int16_t x1, int16_t y1,
+                     uint8_t weight, uint16_t color, bool caps = true) {
+    if (weight == 0) return;
+    if (weight == 1) { drawLine(x0, y0, x1, y1, color); return; }
+
+    const float r = weight * 0.5f;
+    const float r2 = r * r;
+    const float dx = x1 - x0, dy = y1 - y0;
+    const float len2 = dx * dx + dy * dy;
+    const int16_t pad = (int16_t)ceilf(r);
+
+    const int16_t xmin = max((int16_t)0,           (int16_t)(min(x0, x1) - pad));
+    const int16_t xmax = min((int16_t)(width() - 1),(int16_t)(max(x0, x1) + pad));
+    const int16_t ymin = max((int16_t)0,           (int16_t)(min(y0, y1) - pad));
+    const int16_t ymax = min((int16_t)(height() - 1),(int16_t)(max(y0, y1) + pad));
+
+    if (len2 == 0.0f) {
+      if (caps) fillCircle(x0, y0, pad, color);
+      return;
+    }
+
+    const float inv_len2 = 1.0f / len2;
+
+    for (int16_t y = ymin; y <= ymax; y++) {
+      const float py   = (float)(y - y0);
+      const float t_y  = py * dy * inv_len2; // y contribution to projection
+
+      int16_t seg_start = -1;
+      bool    was_inside = false;
+
+      for (int16_t x = xmin; x <= xmax; x++) {
+        const float px = (float)(x - x0);
+        const float t  = px * dx * inv_len2 + t_y;
+        const float tc = t < 0.0f ? 0.0f : (t > 1.0f ? 1.0f : t);
+        const float cx = px - tc * dx;
+        const float cy = py - tc * dy;
+
+        // With caps=false, require projection to land on the segment (flat ends).
+        const bool inside = (cx * cx + cy * cy <= r2) &&
+                            (caps || (t >= 0.0f && t <= 1.0f));
+
+        if (inside && !was_inside) {
+          seg_start = x;
+        } else if (!inside && was_inside) {
+          drawFastHLine(seg_start, y, x - seg_start, color);
+          was_inside = false; // must clear before break — loop won't reach the assignment below
+          break; // stadium is convex — no more inside pixels this row
+        }
+        was_inside = inside;
+      }
+      if (was_inside && seg_start >= 0)
+        drawFastHLine(seg_start, y, xmax - seg_start + 1, color);
+    }
+  }
+};
+
+ExtGFXcanvas1 display(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 // GFXcanvas1 stores pixels MSB-first (bit 7 = pixel x=0), but the Sharp
 // display protocol expects LSB-first on the wire. Reverse each byte before
@@ -57,7 +124,7 @@ void display_init() {
   digitalWrite(PIN_DISPLAY_SS, LOW);
   SPI.endTransaction();
   _display_vcom = _display_vcom ? 0x00 : SHARPMEM_BIT_VCOM;
-  // display.setFont(&FreeMonoBold9pt7b);
+  display.setFont(&FreeMonoBold9pt7b);
   // Get the font height by measuring text bounds for "A"
   int16_t x1, y1;
   uint16_t w, h;
@@ -184,8 +251,7 @@ void draw_text_block(String text, int x, int y, bool color = WHITE,
   int ascent = 100 - y1; // how far text top is above the cursor (baseline)
 
   if (bg) {
-    // Place the box at (x, y), text content starts at (x+border, y+border).
-    display.fillRect(x, y, w + border * 2, h + border * 2, !color);
+    display.fillRect(x, y, (x1 - x) + w + border, h + border * 2, !color);
   }
 
   display.setCursor(x + border, (y + border) + ascent);

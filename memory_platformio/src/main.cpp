@@ -7,6 +7,8 @@
 #include <screens/bob_screen.h>
 #include <screens/debug_menu_screen.h>
 #include <screens/grid_screen.h>
+#include <screens/maze/maze_screen.h>
+#include <screens/tune_screen.h>
 #include <screens/zajac_screen.h>
 #include <sleep_manager.h>
 #include <wifi/wifi_manager.h>
@@ -18,11 +20,13 @@ BobScreen screen_bob;
 ZajacScreen screen_zajac;
 DebugMenuScreen screen_debug;
 GridScreen screen_grid;
+TuneScreen screen_tune;
+MazeScreen screen_maze;
 
 // ---------------------------------------------------------------------------
 // Global state — currentScreen is extern-declared in screen.h.
 // ---------------------------------------------------------------------------
-Screen *currentScreen = &screen_grid;
+Screen *currentScreen = &screen_maze;
 
 void set_screen(ScreenMode mode) {
   currentScreen->on_exit();
@@ -39,6 +43,12 @@ void set_screen(ScreenMode mode) {
   case SCREEN_GRID:
     currentScreen = &screen_grid;
     break;
+  case SCREEN_TUNE:
+    currentScreen = &screen_tune;
+    break;
+  case SCREEN_MAZE:
+    currentScreen = &screen_maze;
+    break;
   }
   currentScreen->ensure_init();
   currentScreen->on_enter();
@@ -53,6 +63,12 @@ DebugMenuItem debug_items[] = {
     DebugMenuItem("Input debug", debug_input_display),
     DebugMenuItem("WiFi", nullptr, wifi_manager_start, wifi_manager_reset),
     DebugMenuItem("WiFi debug", wifi_debug_display),
+    // Screen navigation — closes debug menu and opens the chosen screen.
+    DebugMenuItem("-> Bob", []() { set_screen(SCREEN_BOB); }),
+    DebugMenuItem("-> Zajac", []() { set_screen(SCREEN_ZAJAC); }),
+    DebugMenuItem("-> Grid", []() { set_screen(SCREEN_GRID); }),
+    DebugMenuItem("-> Tune", []() { set_screen(SCREEN_TUNE); }),
+    DebugMenuItem("-> Maze", []() { set_screen(SCREEN_MAZE); }),
 };
 
 void setup() {
@@ -63,6 +79,7 @@ void setup() {
 
   display_init();
   currentScreen->ensure_init();
+  currentScreen->on_enter();
   input_init();
   sleep_init();
   fuel_gauge_init();
@@ -70,7 +87,10 @@ void setup() {
 }
 
 unsigned long last_game_update = 0;
-const unsigned long interval_game_update = 1000000 / 12;
+const unsigned long interval_game_update = 1000000 / 30;
+
+unsigned long last_display_refresh = 0;
+const unsigned long interval_display_refresh = 1000000 / 30;
 
 unsigned long last_fg_update = -9000;
 const unsigned long interval_fg_update = 10000;
@@ -79,6 +99,7 @@ void loop() {
   unsigned long current_micros = micros();
   unsigned long current_millis = millis();
 
+  // Poll input every spin; draw/SPI only on a timer so encoder isn't starved.
   input_update();
   wifi_manager_update();
 
@@ -87,6 +108,11 @@ void loop() {
     currentScreen->update();
     game_rate_update();
   }
+
+  if (current_micros - last_display_refresh < interval_display_refresh)
+    return;
+
+  last_display_refresh = current_micros;
 
   display.fillScreen(WHITE);
 
@@ -105,4 +131,7 @@ void loop() {
   unsigned long t0 = micros();
   display_refresh_dirty();
   refresh_rate_update(micros() - t0);
+
+  // Encoder count is IRQ-backed; read again after blocking SPI.
+  input_update();
 }

@@ -9,6 +9,8 @@ enum ScreenMode {
   SCREEN_ZAJAC,
   SCREEN_DEBUG_MENU,
   SCREEN_GRID,
+  SCREEN_TUNE,
+  SCREEN_MAZE,
 };
 
 // ---------------------------------------------------------------------------
@@ -59,19 +61,6 @@ void toggle_debug_menu() {
     previousScreen = currentScreen;
     set_screen(SCREEN_DEBUG_MENU);
   }
-}
-
-void cycle_screen() {
-  static const ScreenMode cycle[] = {SCREEN_BOB, SCREEN_ZAJAC, SCREEN_GRID};
-  static const int n = sizeof(cycle) / sizeof(cycle[0]);
-  ScreenMode cur = currentScreen->id();
-  for (int i = 0; i < n; i++) {
-    if (cycle[i] == cur) {
-      set_screen(cycle[(i + 1) % n]);
-      return;
-    }
-  }
-  set_screen(cycle[0]); // fallback from debug menu or unknown
 }
 
 #endif

@@ -6,7 +6,13 @@
 #include <display.h>
 #include <wifi/wifi_credentials.h>
 
-#define WIFI_PER_NETWORK_TIMEOUT_MS 8000
+#define WIFI_PER_NETWORK_TIMEOUT_MS 4000
+#define SUPABASE_URL = "https://kfigagoyhqrnlbgnaibh.supabase.co/rest/v1/test'"
+#define SUPABASE_API_KEY                                                       \
+  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."                                    \
+    "eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtmaWdhZ295aHFybmxiZ25haWJoIiwicm9sZSI6" \
+    "ImFub24iLCJpYXQiOjE3Nzc5NzkxMTEsImV4cCI6MjA5MzU1NTExMX0.AmHT_"            \
+    "Joc5XUc8Yq0Nwbdpcdm-RHT3TgWPU_taDd2O2M"
 
 // ---------------------------------------------------------------------------
 // State
@@ -104,7 +110,7 @@ void wifi_debug_display(char *buf, int len) {
     break;
   }
   case WIFI_TEST_CONNECTED:
-    snprintf(buf, len, "WiFi OK  %.12s %ddBm %s", _wifi_ssid, _wifi_rssi,
+    snprintf(buf, len, "WiFi OK %.12s %ddBm %s", _wifi_ssid, _wifi_rssi,
              _wifi_ip);
     break;
   case WIFI_TEST_FAILED:

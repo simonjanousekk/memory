@@ -39,6 +39,7 @@ void input_init() {
   button_p.setDebounceMs(0);
   button_e.setDebounceMs(0);
 
+  // Counts in hardware/ISR; main loop only reads getCount() and dispatches.
   encoder.attachHalfQuad(PIN_ENCODER_A, PIN_ENCODER_B);
 
   button_p.attachPress([]() { sleep_sleep(PIN_BUTTON_P); });
@@ -63,7 +64,7 @@ void input_init() {
 
   // button_e.attachPress([]() { currentScreen->on_encoder_press(); });
   // button_e.attachLongPressStart([]() { cycle_screen(); });
-  button_e.attachPress([]() { cycle_screen(); });
+  // button_e.attachPress([]() { cycle_screen(); });
 }
 
 void input_update() {
@@ -78,9 +79,8 @@ void input_update() {
   encoder_value = encoder.getCount();
   int encoder_delta = int(encoder_value - last_encoder_value);
   debug_rotation -= float(encoder_delta) * 0.2094395102f;
-  if (encoder_delta != 0) {
+  if (encoder_delta != 0)
     currentScreen->on_encoder_rotate(-encoder_delta);
-  }
   last_encoder_value = encoder_value;
 }
 

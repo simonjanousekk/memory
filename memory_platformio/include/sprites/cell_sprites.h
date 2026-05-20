@@ -118,11 +118,16 @@ const uint8_t cell_bayer_7[] PROGMEM = {
 // T=16 — 16/16 density, all foreground
 const uint8_t *const cell_bayer_8 = cell_fill;
 
-const int cell_bayer_count = 17;
-const uint8_t *const cell_bayer_all[] PROGMEM = {
+const int cell_bayer_pingpong_count = 17;
+const uint8_t *const cell_bayer_pingpong[] PROGMEM = {
     cell_bayer_0, cell_bayer_1, cell_bayer_2, cell_bayer_3, cell_bayer_4,
     cell_bayer_5, cell_bayer_6, cell_bayer_7, cell_bayer_8, cell_bayer_7,
     cell_bayer_6, cell_bayer_5, cell_bayer_4, cell_bayer_3, cell_bayer_2,
     cell_bayer_1, cell_bayer_0};
+
+const int cell_bayer_all_count = 9;
+const uint8_t *const cell_bayer_all[] PROGMEM = {
+    cell_bayer_0, cell_bayer_1, cell_bayer_2, cell_bayer_3, cell_bayer_4,
+    cell_bayer_5, cell_bayer_6, cell_bayer_7, cell_bayer_8};
 
 #endif

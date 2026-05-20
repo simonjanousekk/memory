@@ -188,7 +188,7 @@ public:
 // C++11 static member definitions (add new sheets here too).
 const SpriteSheet GridScreen::sheets[] = {
     {cell_circle_all, cell_circle_all_count},
-    {cell_bayer_all, cell_bayer_count},
+    {cell_bayer_pingpong, cell_bayer_pingpong_count},
 };
 const int GridScreen::sheet_count =
     sizeof(GridScreen::sheets) / sizeof(GridScreen::sheets[0]);
