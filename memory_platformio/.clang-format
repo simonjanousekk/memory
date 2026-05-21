@@ -1,16 +1,6 @@
-# Google base, but avoid spurious line wraps:
-# - ColumnLimit: 0 is unreliable (some toolchains fall back to Google’s 80).
-# - Use a large limit so long calls / expressions stay on one line.
 BasedOnStyle: Google
-Language: Cpp
-ColumnLimit: 9999
-ReflowComments: false
-
-AllowAllArgumentsOnNextLine: false
-AllowAllParametersOnNextLine: false
+ColumnLimit: 0
+AlignAfterOpenBracket: DontAlign
+AlwaysBreakAfterReturnType: None
 BinPackArguments: true
 BinPackParameters: true
-
-# Strongly discourage wrapping long call sites / signatures.
-PenaltyBreakBeforeFirstCallParameter: 1000000
-PenaltyBreakParameter: 1000000

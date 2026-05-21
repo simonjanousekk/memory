@@ -1,6 +1,7 @@
 #ifndef MAZE_SCREEN_H
 #define MAZE_SCREEN_H
 
+#include <game_seed.h>
 #include <screen.h>
 #include <screens/maze/dot.h>
 #include <screens/maze/maze.h>
@@ -40,6 +41,23 @@ class MazeScreen : public Screen {
     float x = dot.x(), y = dot.y();
     float vx = dot.vx(), vy = dot.vy();
 
+    const float maze_bottom = GameMaze::rows * C;
+
+    // Once the dot has passed the maze floor it is inside the exit chamber.
+    // Enforce only the three chamber walls (left, right, floor) so that the
+    // clamped-row logic below can never see the solid bottom border of an
+    // adjacent column and push the dot back up out of the exit.
+    if (y > maze_bottom) {
+      const float ex0 = maze.exit_c() * C;
+      const float ex1 = (maze.exit_c() + 1) * C;
+      if (vx < 0 && x - cr < ex0) { x = ex0 + cr; vx = 0; }
+      if (vx > 0 && x + cr > ex1) { x = ex1 - cr; vx = 0; }
+      if (vy > 0 && y + cr > maze_bottom + C) { y = maze_bottom + C - cr; vy = 0; }
+      dot.set_pos(x, y);
+      dot.set_vel(vx, vy);
+      return;
+    }
+
     int col = constrain((int)(x / C), 0, GameMaze::cols - 1);
     int row = constrain((int)(y / C), 0, GameMaze::rows - 1);
     float cx = col * C, cy = row * C;
@@ -69,7 +87,7 @@ public:
   ScreenMode id() const override { return SCREEN_MAZE; }
 
   void on_enter() override {
-    maze.generate();
+    maze.generate(g_game_seed);
     dot.reset(HW, HH);
     background.generate_grid();
     _angle = 0.0f;

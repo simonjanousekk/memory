@@ -1,14 +1,14 @@
 #include <Arduino.h>
-
 #include <display.h>
 #include <fuelGauge.h>
+#include <game_seed.h>
 #include <input.h>
 #include <screen.h>
 #include <screens/bob_screen.h>
 #include <screens/debug_menu_screen.h>
 #include <screens/grid_screen.h>
+#include <screens/letters_screen.h>
 #include <screens/maze/maze_screen.h>
-#include <screens/tune_screen.h>
 #include <screens/zajac_screen.h>
 #include <sleep_manager.h>
 #include <wifi/wifi_manager.h>
@@ -20,35 +20,32 @@ BobScreen screen_bob;
 ZajacScreen screen_zajac;
 DebugMenuScreen screen_debug;
 GridScreen screen_grid;
-TuneScreen screen_tune;
 MazeScreen screen_maze;
+LettersScreen screen_letters;
 
 // ---------------------------------------------------------------------------
 // Global state — currentScreen is extern-declared in screen.h.
 // ---------------------------------------------------------------------------
-Screen *currentScreen = &screen_maze;
+Screen* currentScreen = &screen_letters;
 
 void set_screen(ScreenMode mode) {
   currentScreen->on_exit();
   switch (mode) {
-  case SCREEN_BOB:
-    currentScreen = &screen_bob;
-    break;
-  case SCREEN_ZAJAC:
-    currentScreen = &screen_zajac;
-    break;
-  case SCREEN_DEBUG_MENU:
-    currentScreen = &screen_debug;
-    break;
-  case SCREEN_GRID:
-    currentScreen = &screen_grid;
-    break;
-  case SCREEN_TUNE:
-    currentScreen = &screen_tune;
-    break;
-  case SCREEN_MAZE:
-    currentScreen = &screen_maze;
-    break;
+    case SCREEN_BOB:
+      currentScreen = &screen_bob;
+      break;
+    case SCREEN_ZAJAC:
+      currentScreen = &screen_zajac;
+      break;
+    case SCREEN_DEBUG_MENU:
+      currentScreen = &screen_debug;
+      break;
+    case SCREEN_GRID:
+      currentScreen = &screen_grid;
+      break;
+    case SCREEN_LETTERS:
+      currentScreen = &screen_letters;
+      break;
   }
   currentScreen->ensure_init();
   currentScreen->on_enter();
@@ -63,12 +60,14 @@ DebugMenuItem debug_items[] = {
     DebugMenuItem("Input debug", debug_input_display),
     DebugMenuItem("WiFi", nullptr, wifi_manager_start, wifi_manager_reset),
     DebugMenuItem("WiFi debug", wifi_debug_display),
+    // Shared seed for Maze and Letters — A to edit, rotate to change, B to close
+    DebugMenuItem("Seed", &g_game_seed),
     // Screen navigation — closes debug menu and opens the chosen screen.
     DebugMenuItem("-> Bob", []() { set_screen(SCREEN_BOB); }),
     DebugMenuItem("-> Zajac", []() { set_screen(SCREEN_ZAJAC); }),
     DebugMenuItem("-> Grid", []() { set_screen(SCREEN_GRID); }),
-    DebugMenuItem("-> Tune", []() { set_screen(SCREEN_TUNE); }),
     DebugMenuItem("-> Maze", []() { set_screen(SCREEN_MAZE); }),
+    DebugMenuItem("-> Letters", []() { set_screen(SCREEN_LETTERS); }),
 };
 
 void setup() {

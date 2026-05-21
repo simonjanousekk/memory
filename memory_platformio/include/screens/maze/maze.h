@@ -27,9 +27,10 @@ static const uint8_t WALL_W = 0x8;
 //
 // has_wall(r, c, dir) maps N/S/E/W to the canonical array entry.
 // ---------------------------------------------------------------------------
-template <int ROWS, int COLS, int CELL> class Maze {
-  bool _h[ROWS + 1][COLS]; // horizontal walls
-  bool _v[ROWS][COLS + 1]; // vertical walls
+template <int ROWS, int COLS, int CELL>
+class Maze {
+  bool _h[ROWS + 1][COLS];  // horizontal walls
+  bool _v[ROWS][COLS + 1];  // vertical walls
   int _exit_r = ROWS - 1;
   int _exit_c = COLS / 2;
   uint32_t _last_seed = 0;
@@ -42,7 +43,7 @@ template <int ROWS, int COLS, int CELL> class Maze {
   static constexpr float WALL_T = 3.0f;
 
   void draw_segment(float x1, float y1, float x2, float y2, float hw, float hh,
-                    float ca, float sa, uint16_t color) const {
+      float ca, float sa, uint16_t color) const {
     // const float h = WALL_T * 0.5f;
     // if (y1 == y2) // horizontal wall: offset above/below in local space
     //   draw_rect(x1, y1 - h, x2 - x1, WALL_T, hw, hh, ca, sa, color);
@@ -59,7 +60,7 @@ template <int ROWS, int COLS, int CELL> class Maze {
 
   // Draws a rotated filled quad (two triangles) in maze-local space.
   void draw_rect(float x, float y, float w, float h, float hw, float hh,
-                 float ca, float sa, uint16_t color) const {
+      float ca, float sa, uint16_t color) const {
     int sx1, sy1, sx2, sy2, sx3, sy3, sx4, sy4;
     rotate_to_screen(x, y, hw, hh, ca, sa, sx1, sy1);
     rotate_to_screen(x + w, y, hw, hh, ca, sa, sx2, sy2);
@@ -69,7 +70,7 @@ template <int ROWS, int COLS, int CELL> class Maze {
     display.fillTriangle(sx2, sy2, sx3, sy3, sx4, sy4, color);
   }
 
-public:
+ public:
   static constexpr int rows = ROWS;
   static constexpr int cols = COLS;
   static constexpr int cell_px = CELL;
@@ -92,12 +93,14 @@ public:
     bool visited[ROWS][COLS];
     memset(visited, 0, sizeof(visited));
 
-    struct Cell { int8_t r, c; };
+    struct Cell {
+      int8_t r, c;
+    };
     Cell stack[ROWS * COLS];
     int top = 0;
 
     const int dr[4] = {-1, 0, +1, 0};  // N E S W
-    const int dc[4] = { 0,+1,  0,-1};
+    const int dc[4] = {0, +1, 0, -1};
 
     const int sr = ROWS / 2, sc = COLS / 2;
     visited[sr][sc] = true;
@@ -114,16 +117,27 @@ public:
           dirs[nd++] = d;
       }
 
-      if (nd == 0) { top--; continue; }
+      if (nd == 0) {
+        top--;
+        continue;
+      }
 
-      const int d  = dirs[random(nd)];
+      const int d = dirs[random(nd)];
       const int nr = r + dr[d], nc = c + dc[d];
 
       switch (d) {
-        case 0: _h[r][c]     = false; break;  // N
-        case 1: _v[r][c + 1] = false; break;  // E
-        case 2: _h[r + 1][c] = false; break;  // S
-        case 3: _v[r][c]     = false; break;  // W
+        case 0:
+          _h[r][c] = false;
+          break;  // N
+        case 1:
+          _v[r][c + 1] = false;
+          break;  // E
+        case 2:
+          _h[r + 1][c] = false;
+          break;  // S
+        case 3:
+          _v[r][c] = false;
+          break;  // W
       }
 
       visited[nr][nc] = true;
@@ -144,14 +158,14 @@ public:
     if (r < 0 || r >= ROWS || c < 0 || c >= COLS)
       return false;
     switch (dir) {
-    case WALL_N:
-      return _h[r][c];
-    case WALL_S:
-      return _h[r + 1][c];
-    case WALL_W:
-      return _v[r][c];
-    case WALL_E:
-      return _v[r][c + 1];
+      case WALL_N:
+        return _h[r][c];
+      case WALL_S:
+        return _h[r + 1][c];
+      case WALL_W:
+        return _v[r][c];
+      case WALL_E:
+        return _v[r][c + 1];
     }
     return false;
   }
@@ -169,7 +183,7 @@ public:
     // White background slightly larger than the maze
     const int pad = 5;
     draw_rect(-pad, -pad, hw * 2 + pad * 2, hh * 2 + pad * 2, hw, hh, ca, sa,
-              WHITE);
+        WHITE);
 
     // Exit chamber background: 1 cell wide (matching the exit gap), 1 cell
     // tall.
@@ -178,28 +192,67 @@ public:
     const float ecy0 = (float)(ROWS * CELL);
     const float ecy1 = (float)((ROWS + 1) * CELL);
     draw_rect(ecx0 - pad, ecy0 - pad, ecx1 - ecx0 + pad * 2,
-              ecy1 - ecy0 + pad * 2, hw, hh, ca, sa, WHITE);
+        ecy1 - ecy0 + pad * 2, hw, hh, ca, sa, WHITE);
 
     for (int r = 0; r <= ROWS; r++)
       for (int c = 0; c < COLS; c++)
         if (_h[r][c])
           draw_segment((float)(c * CELL), (float)(r * CELL),
-                       (float)((c + 1) * CELL), (float)(r * CELL), hw, hh, ca,
-                       sa, BLACK);
+              (float)((c + 1) * CELL), (float)(r * CELL), hw, hh,
+              ca, sa, BLACK);
 
     for (int r = 0; r < ROWS; r++)
       for (int c = 0; c <= COLS; c++)
         if (_v[r][c])
           draw_segment((float)(c * CELL), (float)(r * CELL), (float)(c * CELL),
-                       (float)((r + 1) * CELL), hw, hh, ca, sa, BLACK);
+              (float)((r + 1) * CELL), hw, hh, ca, sa, BLACK);
 
     // Exit chamber walls: left, right, and bottom sides.
     // The top is already formed by the maze's bottom border (with the exit
     // gap).
-    draw_segment(ecx0, ecy0, ecx0, ecy1, hw, hh, ca, sa, BLACK); // left
-    draw_segment(ecx1, ecy0, ecx1, ecy1, hw, hh, ca, sa, BLACK); // right
-    draw_segment(ecx0, ecy1, ecx1, ecy1, hw, hh, ca, sa, BLACK); // bottom
+    draw_segment(ecx0, ecy0, ecx0, ecy1, hw, hh, ca, sa, BLACK);  // left
+    draw_segment(ecx1, ecy0, ecx1, ecy1, hw, hh, ca, sa, BLACK);  // right
+    draw_segment(ecx0, ecy1, ecx1, ecy1, hw, hh, ca, sa, BLACK);  // bottom
   }
+
+  // void draw(float angle) const {
+  //   const float hw = COLS * CELL * 0.5f;
+  //   const float hh = ROWS * CELL * 0.5f;
+  //   const float ca = cosf(angle), sa = sinf(angle);
+
+  //   const int WT = 4;
+  //   const int HWT = WT * 0.5f;
+
+  //   const int pad = 5;
+
+  //   // draw_rect(0, 0, COLS * CELL, ROWS * CELL, hw, hh, ca, sa, BLACK);
+  //   draw_rect(-pad, -pad, hw * 2 + pad * 2, hh * 2 + pad * 2, hw, hh, ca, sa,
+  //             BLACK);
+
+  //   for (int r = 0; r < ROWS; r++) {
+  //     for (int c = 0; c < COLS; c++) {
+  //       int x = c * CELL;
+  //       int y = r * CELL;
+  //       draw_rect(x + HWT, y + HWT, CELL - WT, CELL - WT, hw, hh, ca, sa,
+  //                 WHITE);
+
+  //       if (!has_wall(r, c, WALL_N)) {
+  //         draw_rect(x + HWT, y, CELL - WT, HWT, hw, hh, ca, sa, WHITE);
+  //       }
+  //       if (!has_wall(r, c, WALL_E)) {
+  //         draw_rect(x + CELL - HWT, y + HWT, HWT, CELL - WT, hw, hh, ca, sa,
+  //                   WHITE);
+  //       }
+  //       if (!has_wall(r, c, WALL_S)) {
+  //         draw_rect(x + HWT, y + CELL - HWT, CELL - WT, HWT, hw, hh, ca, sa,
+  //                   WHITE);
+  //       }
+  //       if (!has_wall(r, c, WALL_W)) {
+  //         draw_rect(x, y + HWT, HWT, CELL - WT, hw, hh, ca, sa, WHITE);
+  //       }
+  //     }
+  //   }
+  // }
 };
 
 // ---------------------------------------------------------------------------

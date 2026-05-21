@@ -29,23 +29,30 @@ public:
   void (*on_enable)();
   void (*on_disable)();
   void (*action)(); // if set: one-shot action item, no toggle state
+  uint32_t *value_ptr; // if set: editable numeric value item
 
   DebugMenuItem()
       : label(""), enabled(false), render(nullptr), on_enable(nullptr),
-        on_disable(nullptr), action(nullptr) {
+        on_disable(nullptr), action(nullptr), value_ptr(nullptr) {
     label_fixed_width[0] = '\0';
   }
   // Toggle / overlay item
   DebugMenuItem(const char *label, void (*render)(char *buf, int len) = nullptr,
                 void (*on_enable)() = nullptr, void (*on_disable)() = nullptr)
       : label(label), enabled(false), render(render), on_enable(on_enable),
-        on_disable(on_disable), action(nullptr) {
+        on_disable(on_disable), action(nullptr), value_ptr(nullptr) {
     label_fixed_width[0] = '\0';
   }
   // Action item — second param type (void(*)()) is distinct from render
   DebugMenuItem(const char *label, void (*action)())
       : label(label), enabled(false), render(nullptr), on_enable(nullptr),
-        on_disable(nullptr), action(action) {
+        on_disable(nullptr), action(action), value_ptr(nullptr) {
+    label_fixed_width[0] = '\0';
+  }
+  // Editable value item — Button A enters editing, encoder changes value, B exits
+  DebugMenuItem(const char *label, uint32_t *value)
+      : label(label), enabled(false), render(nullptr), on_enable(nullptr),
+        on_disable(nullptr), action(nullptr), value_ptr(value) {
     label_fixed_width[0] = '\0';
   }
 
@@ -54,6 +61,8 @@ public:
       action();
       return;
     }
+    if (value_ptr)
+      return; // editing is handled by DebugMenu directly
     enabled = !enabled;
     if (enabled && on_enable)
       on_enable();
@@ -70,6 +79,7 @@ public:
   int selected_index = 0;
   DebugMenuItem *items = nullptr;
   int item_count = 0;
+  bool _editing = false; // true while rotating encoder changes a value item
 
   void init(DebugMenuItem *items_, int count) {
     items = items_;
@@ -95,7 +105,13 @@ public:
   }
 
   void encoder_step(int delta) {
-    if (delta == 0 || item_count == 0)
+    if (delta == 0)
+      return;
+    if (_editing && items && items[selected_index].value_ptr) {
+      *items[selected_index].value_ptr += (uint32_t)delta;
+      return;
+    }
+    if (item_count == 0)
       return;
     selected_index =
         ((selected_index + delta) % item_count + item_count) % item_count;
@@ -104,8 +120,15 @@ public:
   void confirm_selected() {
     if (!items)
       return;
+    if (items[selected_index].value_ptr) {
+      _editing = !_editing;
+      return;
+    }
+    _editing = false;
     items[selected_index].toggle();
   }
+
+  void cancel_edit() { _editing = false; }
 
   void render_overlays() const {
     if (!items)
@@ -134,14 +157,21 @@ public:
     int row_y = border;
     char row_buf[32];
     for (int i = 0; i < item_count; i++) {
-      if (items[i].action)
+      if (items[i].value_ptr) {
+        bool editing_this = (_editing && i == selected_index);
+        snprintf(row_buf, sizeof(row_buf), "%s %s%lu%s",
+                 items[i].label_fixed_width,
+                 editing_this ? "[" : " ",
+                 (unsigned long)*items[i].value_ptr,
+                 editing_this ? "]" : " ");
+      } else if (items[i].action) {
         snprintf(row_buf, sizeof(row_buf), "%s >", items[i].label_fixed_width);
-      else
+      } else {
         snprintf(row_buf, sizeof(row_buf), "%s - %s", items[i].label_fixed_width,
                  items[i].enabled ? " ON" : "OFF");
+      }
       draw_text_block(row_buf, border, row_y,
                       i == selected_index ? WHITE : BLACK);
-      // items[i].draw_row(border, row_y, i == selected_index);
       row_y += font_height + 6;
     }
   }
@@ -157,7 +187,12 @@ public:
   ScreenMode id() const override { return SCREEN_DEBUG_MENU; }
   void draw() override { debug_menu.draw(); }
   void on_button_a() override { debug_menu.confirm_selected(); }
-  void on_button_b() override { toggle_debug_menu(); }
+  void on_button_b() override {
+    if (debug_menu._editing)
+      debug_menu.cancel_edit();
+    else
+      toggle_debug_menu();
+  }
   void on_encoder_press() override { debug_menu.confirm_selected(); }
   void on_encoder_rotate(int delta) override { debug_menu.encoder_step(delta); }
 };

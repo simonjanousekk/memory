@@ -9,8 +9,8 @@ enum ScreenMode {
   SCREEN_ZAJAC,
   SCREEN_DEBUG_MENU,
   SCREEN_GRID,
-  SCREEN_TUNE,
   SCREEN_MAZE,
+  SCREEN_LETTERS,
 };
 
 // ---------------------------------------------------------------------------
@@ -20,14 +20,14 @@ enum ScreenMode {
 class Screen {
   bool _initialized = false;
 
-public:
+ public:
   virtual ~Screen() {}
   virtual ScreenMode id() const = 0;
-  virtual void on_init() {}  // called once ever, before first on_enter
-  virtual void on_enter() {} // called every time screen becomes active
-  virtual void on_exit() {}  // called every time screen is left
-  virtual void update() {}   // called on every game tick
-  virtual void draw() = 0;   // called every render frame
+  virtual void on_init() {}   // called once ever, before first on_enter
+  virtual void on_enter() {}  // called every time screen becomes active
+  virtual void on_exit() {}   // called every time screen is left
+  virtual void update() {}    // called on every game tick
+  virtual void draw() = 0;    // called every render frame
 
   virtual void on_button_a() {}
   virtual void on_button_b() {}
@@ -42,11 +42,11 @@ public:
   }
 };
 
-extern Screen *currentScreen;
+extern Screen* currentScreen;
 extern void set_screen(ScreenMode mode);
 
 // Saved before entering debug menu so we can return to the right screen.
-Screen *previousScreen = nullptr;
+Screen* previousScreen = nullptr;
 
 void toggle_debug_menu() {
   if (currentScreen->id() == SCREEN_DEBUG_MENU) {
@@ -55,7 +55,7 @@ void toggle_debug_menu() {
       currentScreen = previousScreen;
       currentScreen->on_enter();
     } else {
-      set_screen(SCREEN_BOB); // fallback if entered without toggle
+      set_screen(SCREEN_BOB);  // fallback if entered without toggle
     }
   } else {
     previousScreen = currentScreen;
