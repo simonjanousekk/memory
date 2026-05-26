@@ -5,10 +5,13 @@
 #include <input.h>
 #include <screen.h>
 #include <screens/bob_screen.h>
+#include <screens/count_screen.h>
 #include <screens/debug_menu_screen.h>
 #include <screens/grid_screen.h>
 #include <screens/letters_screen.h>
+#include <screens/logo_screen.h>
 #include <screens/maze/maze_screen.h>
+#include <screens/simonsays_screen.h>
 #include <screens/zajac_screen.h>
 #include <sleep_manager.h>
 #include <wifi/wifi_manager.h>
@@ -22,11 +25,14 @@ DebugMenuScreen screen_debug;
 GridScreen screen_grid;
 MazeScreen screen_maze;
 LettersScreen screen_letters;
+// SimonSaysScreen screen_simonsays;
+LogoScreen screen_logo;
+CountScreen screen_count;
 
 // ---------------------------------------------------------------------------
 // Global state — currentScreen is extern-declared in screen.h.
 // ---------------------------------------------------------------------------
-Screen* currentScreen = &screen_letters;
+Screen* currentScreen = &screen_count;
 
 void set_screen(ScreenMode mode) {
   currentScreen->on_exit();
@@ -46,6 +52,18 @@ void set_screen(ScreenMode mode) {
     case SCREEN_LETTERS:
       currentScreen = &screen_letters;
       break;
+    // case SCREEN_SIMONSAYS:
+    //   currentScreen = &screen_simonsays;
+    //   break;
+    case SCREEN_MAZE:
+      currentScreen = &screen_maze;
+      break;
+    case SCREEN_LOGO:
+      currentScreen = &screen_logo;
+      break;
+    case SCREEN_COUNT:
+      currentScreen = &screen_count;
+      break;
   }
   currentScreen->ensure_init();
   currentScreen->on_enter();
@@ -63,11 +81,14 @@ DebugMenuItem debug_items[] = {
     // Shared seed for Maze and Letters — A to edit, rotate to change, B to close
     DebugMenuItem("Seed", &g_game_seed),
     // Screen navigation — closes debug menu and opens the chosen screen.
+    DebugMenuItem("-> Maze", []() { set_screen(SCREEN_MAZE); }),
+    DebugMenuItem("-> Letters", []() { set_screen(SCREEN_LETTERS); }),
+    DebugMenuItem("-> Count", []() { set_screen(SCREEN_COUNT); }),
+    // DebugMenuItem("-> Simon Says", []() { set_screen(SCREEN_SIMONSAYS); }),
     DebugMenuItem("-> Bob", []() { set_screen(SCREEN_BOB); }),
     DebugMenuItem("-> Zajac", []() { set_screen(SCREEN_ZAJAC); }),
     DebugMenuItem("-> Grid", []() { set_screen(SCREEN_GRID); }),
-    DebugMenuItem("-> Maze", []() { set_screen(SCREEN_MAZE); }),
-    DebugMenuItem("-> Letters", []() { set_screen(SCREEN_LETTERS); }),
+    DebugMenuItem("-> Logo", []() { set_screen(SCREEN_LOGO); }),
 };
 
 void setup() {

@@ -11,6 +11,9 @@ enum ScreenMode {
   SCREEN_GRID,
   SCREEN_MAZE,
   SCREEN_LETTERS,
+  // SCREEN_SIMONSAYS,
+  SCREEN_LOGO,
+  SCREEN_COUNT,
 };
 
 // ---------------------------------------------------------------------------
@@ -33,6 +36,12 @@ class Screen {
   virtual void on_button_b() {}
   virtual void on_encoder_press() {}
   virtual void on_encoder_rotate(int delta) {}
+
+  // Optional — minigame screens override these so the game controller
+  // can detect completion and read the final time without knowing the
+  // concrete screen type. Non-minigame screens leave the defaults.
+  virtual bool     is_complete() const { return false; }
+  virtual uint32_t finish_ms()   const { return 0; }
 
   void ensure_init() {
     if (!_initialized) {

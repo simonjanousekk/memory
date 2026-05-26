@@ -3,6 +3,7 @@
 
 #include <display.h>
 #include <game_seed.h>
+#include <game_state.h>
 #include <screen.h>
 #include <sprites/cell_sprites.h>
 
@@ -13,10 +14,7 @@ class LettersScreen : public Screen {
   static constexpr int HIDDEN_COUNT = cell_bayer_peak_count;
 
   bool used_hidden_indices[HIDDEN_COUNT] = {};
-  bool _won = false;
-
-  uint32_t _start_time = millis();
-  uint32_t _finish_time = 0;
+  TimedGame _timer;
 
   struct LetterCell {
     char letter;
@@ -48,11 +46,14 @@ class LettersScreen : public Screen {
   LetterCell grid[GRID_COLS][GRID_ROWS];
 
   // Array of random words
-  static constexpr int NUM_WORDS = 10;
+  static constexpr int NUM_WORDS = 30;
   const char* random_words[NUM_WORDS] = {
-      "APPLE", "BANANA", "CHERRY", "ORANGE",
-      "LEMON", "GRAPE", "PEACH", "MANGO",
-      "BERRY", "PLUM"};
+      "BOOK", "TREE", "JUMP", "MILK", "HAPPY",
+      "WATER", "APPLE", "HOUSE", "SMILE", "BREAD",
+      "CHAIR", "TABLE", "CLOCK", "SHIRT", "SHOES",
+      "GREEN", "PAPER", "RIVER", "SLEEP", "LUNCH",
+      "WINDOW", "YELLOW", "FLOWER", "DOCTOR", "ANIMAL",
+      "BANANA", "FRIEND", "SCHOOL", "STREET", "GUITAR"};
 
   int next_hidden_index() {
     int start = random(HIDDEN_COUNT);
@@ -118,14 +119,22 @@ class LettersScreen : public Screen {
   }
 
   void zap() {
+    if (_timer.won) return;
+
+    int newly_zapped = 0;
     for (int r = 0; r < GRID_ROWS; r++) {
       for (int c = 0; c < GRID_COLS; c++) {
         LetterCell& cell = grid[c][r];
         if (cell.is_word && !cell.is_zapped &&
             (cell.hidden_index == 0 || cell.hidden_index == 1 || cell.hidden_index == 2 || cell.hidden_index == HIDDEN_COUNT - 1 || cell.hidden_index == HIDDEN_COUNT - 2)) {
           cell.is_zapped = true;
+          newly_zapped++;
         }
       }
+    }
+
+    if (newly_zapped == 0) {
+      _timer.add_penalty();
     }
 
     check_win();
@@ -143,19 +152,18 @@ class LettersScreen : public Screen {
       }
     }
     if (won) {
-      _won = true;
-      _finish_time = millis() - _start_time;
+      _timer.complete();
     }
   }
 
  public:
-  ScreenMode id() const override { return SCREEN_LETTERS; }
+  ScreenMode id()          const override { return SCREEN_LETTERS; }
+  bool       is_complete() const override { return _timer.won; }
+  uint32_t   finish_ms()   const override { return _timer.finish_ms; }
 
   void on_enter() override {
     generate_grid();
-    _start_time = millis();
-    _finish_time = 0;
-    _won = false;
+    _timer.begin();
   }
 
   void on_button_a() override { zap(); }
@@ -179,10 +187,6 @@ class LettersScreen : public Screen {
       }
     }
 
-    if (_won) {
-      draw_text_block("YOU WON!", SCREEN_WIDTH / 2 - 20, SCREEN_HEIGHT / 2 - 8);
-      draw_text_block(String(_finish_time), SCREEN_WIDTH / 2 - 20, SCREEN_HEIGHT / 2 + 8);
-    }
   }
 };
 
