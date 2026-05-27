@@ -1,14 +1,45 @@
 <script>
-  // import svelteLogo from './assets/svelte.svg'
-  // import viteLogo from './assets/vite.svg'
-  // import heroImg from './assets/hero.png'
-  // import Counter from './lib/Counter.svelte'
+  import { onMount } from "svelte";
   import logo from "./assets/tot-m2_logo.svg";
   import blueprint_1 from "./assets/blueprint_1.png";
   import blueprint_2 from "./assets/blueprint_2.png";
   import htp_maze from "./assets/htp_maze.svg";
   import htp_words from "./assets/htp_word.svg";
   import htp_shape from "./assets/htp_shape.svg";
+  import { subscribeLeaderboard } from "./lib/supabase.js";
+
+  /** @type {{ name: string, rank: number, created_at: string }[]} */
+  let topByRank = $state([]);
+  /** @type {{ name: string, rank: number, created_at: string }[]} */
+  let mostRecent = $state([]);
+  /** @type {string | null} */
+  let leaderboardError = $state(null);
+
+  /** @param {string} iso */
+  function formatDate(iso) {
+    return new Date(iso).toLocaleString("cs-CZ", {
+      // day: "numeric",
+      // month: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
+
+  onMount(() => {
+    return subscribeLeaderboard(
+      ({ byRank, byRecent }) => {
+        topByRank = byRank;
+        mostRecent = byRecent;
+        leaderboardError = null;
+      },
+      {
+        intervalMs: 15_000,
+        onError: (e) => {
+          leaderboardError = e.message;
+        },
+      },
+    );
+  });
 </script>
 
 <div class="logo">
@@ -48,6 +79,40 @@
 <div class="leaderboard">
   <div class="text">
     <h4>leaderboard</h4>
-    <p>nevim co to bude</p>
+    <p>Tady by asi mělo být něco napsaný...</p>
   </div>
+  {#if leaderboardError}
+    <p class="leaderboard-error">{leaderboardError}</p>
+  {:else}
+    <div class="leaderboard-columns">
+      <section>
+        <h5>top 10</h5>
+        <ol>
+          {#each topByRank as player}
+            <li>
+              <span class="rank"
+                >#{player.rank.toString().padStart(2, "0")}</span
+              >
+              <span class="name">{player.name}</span>
+            </li>
+          {/each}
+        </ol>
+      </section>
+
+      <section>
+        <h5>recent</h5>
+        <ol>
+          {#each mostRecent as player}
+            <li>
+              <span class="name">{player.name}</span>
+              <span class="meta"
+                >#{player.rank.toString().padStart(2, "0")}</span
+              >
+              <span class="meta">{formatDate(player.created_at)}</span>
+            </li>
+          {/each}
+        </ol>
+      </section>
+    </div>
+  {/if}
 </div>
