@@ -79,7 +79,7 @@
 <div class="leaderboard">
   <div class="text">
     <h4>leaderboard</h4>
-    <p>Tady by asi mělo být něco napsaný...</p>
+    <p>Tady by asi mělo být něco napsaný....</p>
   </div>
   {#if leaderboardError}
     <p class="leaderboard-error">{leaderboardError}</p>
