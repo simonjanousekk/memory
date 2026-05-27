@@ -1,42 +1,98 @@
 #include <Arduino.h>
 #include <display.h>
 #include <fuelGauge.h>
+#include <game_controller.h>
 #include <game_seed.h>
 #include <input.h>
 #include <screen.h>
-#include <screens/bob_screen.h>
+// Minigame screens
 #include <screens/count_screen.h>
-#include <screens/debug_menu_screen.h>
-#include <screens/grid_screen.h>
 #include <screens/letters_screen.h>
 #include <screens/logo_screen.h>
 #include <screens/maze/maze_screen.h>
-#include <screens/simonsays_screen.h>
+// Game flow screens
+#include <screens/flow/go_again_screen.h>
+#include <screens/flow/goodbye_screen.h>
+#include <screens/flow/intro_screen.h>
+#include <screens/flow/name_entry_screen.h>
+#include <screens/flow/opponent_screen.h>
+#include <screens/flow/round_result_screen.h>
+#include <screens/flow/upload_screen.h>
+// Dev / utility screens
+#include <screens/bob_screen.h>
+#include <screens/debug_menu_screen.h>
+#include <screens/grid_screen.h>
+#include <screens/test_screen.h>
 #include <screens/zajac_screen.h>
 #include <sleep_manager.h>
 #include <wifi/wifi_manager.h>
-
 // ---------------------------------------------------------------------------
-// Screen instances — add a new screen here and in set_screen() below.
+// Screen instances
 // ---------------------------------------------------------------------------
+// Minigames
+MazeScreen screen_maze;
+LettersScreen screen_letters;
+CountScreen screen_count;
+// Game flow
+LogoScreen screen_logo;
+IntroScreen screen_intro;
+OpponentScreen screen_opponent;
+RoundResultScreen screen_result;
+GoAgainScreen screen_go_again;
+NameEntryScreen screen_name_entry;
+UploadScreen screen_upload;
+GoodbyeScreen screen_goodbye;
+// Dev / utility
 BobScreen screen_bob;
 ZajacScreen screen_zajac;
 DebugMenuScreen screen_debug;
 GridScreen screen_grid;
-MazeScreen screen_maze;
-LettersScreen screen_letters;
-// SimonSaysScreen screen_simonsays;
-LogoScreen screen_logo;
-CountScreen screen_count;
+TestScreen screen_test;
 
 // ---------------------------------------------------------------------------
-// Global state — currentScreen is extern-declared in screen.h.
+// Global state
 // ---------------------------------------------------------------------------
-Screen* currentScreen = &screen_count;
+Screen* currentScreen = &screen_logo;
 
 void set_screen(ScreenMode mode) {
   currentScreen->on_exit();
   switch (mode) {
+    // Minigames
+    case SCREEN_MAZE:
+      currentScreen = &screen_maze;
+      break;
+    case SCREEN_LETTERS:
+      currentScreen = &screen_letters;
+      break;
+    case SCREEN_COUNT:
+      currentScreen = &screen_count;
+      break;
+    // Game flow
+    case SCREEN_LOGO:
+      currentScreen = &screen_logo;
+      break;
+    case SCREEN_INTRO:
+      currentScreen = &screen_intro;
+      break;
+    case SCREEN_OPPONENT:
+      currentScreen = &screen_opponent;
+      break;
+    case SCREEN_RESULT:
+      currentScreen = &screen_result;
+      break;
+    case SCREEN_GO_AGAIN:
+      currentScreen = &screen_go_again;
+      break;
+    case SCREEN_NAME_ENTRY:
+      currentScreen = &screen_name_entry;
+      break;
+    case SCREEN_UPLOAD:
+      currentScreen = &screen_upload;
+      break;
+    case SCREEN_GOODBYE:
+      currentScreen = &screen_goodbye;
+      break;
+    // Dev / utility
     case SCREEN_BOB:
       currentScreen = &screen_bob;
       break;
@@ -49,20 +105,11 @@ void set_screen(ScreenMode mode) {
     case SCREEN_GRID:
       currentScreen = &screen_grid;
       break;
-    case SCREEN_LETTERS:
-      currentScreen = &screen_letters;
+    case SCREEN_TEST:
+      currentScreen = &screen_test;
       break;
-    // case SCREEN_SIMONSAYS:
-    //   currentScreen = &screen_simonsays;
-    //   break;
-    case SCREEN_MAZE:
-      currentScreen = &screen_maze;
-      break;
-    case SCREEN_LOGO:
+    default:
       currentScreen = &screen_logo;
-      break;
-    case SCREEN_COUNT:
-      currentScreen = &screen_count;
       break;
   }
   currentScreen->ensure_init();
@@ -70,7 +117,7 @@ void set_screen(ScreenMode mode) {
 }
 
 // ---------------------------------------------------------------------------
-// Debug menu items — all render callbacks must be in scope at this point.
+// Debug menu items
 // ---------------------------------------------------------------------------
 DebugMenuItem debug_items[] = {
     DebugMenuItem("Fuel gauge", fuel_gauge_debug_display),
@@ -78,17 +125,16 @@ DebugMenuItem debug_items[] = {
     DebugMenuItem("Input debug", debug_input_display),
     DebugMenuItem("WiFi", nullptr, wifi_manager_start, wifi_manager_reset),
     DebugMenuItem("WiFi debug", wifi_debug_display),
-    // Shared seed for Maze and Letters — A to edit, rotate to change, B to close
     DebugMenuItem("Seed", &g_game_seed),
-    // Screen navigation — closes debug menu and opens the chosen screen.
     DebugMenuItem("-> Maze", []() { set_screen(SCREEN_MAZE); }),
     DebugMenuItem("-> Letters", []() { set_screen(SCREEN_LETTERS); }),
     DebugMenuItem("-> Count", []() { set_screen(SCREEN_COUNT); }),
-    // DebugMenuItem("-> Simon Says", []() { set_screen(SCREEN_SIMONSAYS); }),
     DebugMenuItem("-> Bob", []() { set_screen(SCREEN_BOB); }),
     DebugMenuItem("-> Zajac", []() { set_screen(SCREEN_ZAJAC); }),
     DebugMenuItem("-> Grid", []() { set_screen(SCREEN_GRID); }),
     DebugMenuItem("-> Logo", []() { set_screen(SCREEN_LOGO); }),
+    DebugMenuItem("-> Test", []() { set_screen(SCREEN_TEST); }),
+    DebugMenuItem("-> Name Entry", []() { set_screen(SCREEN_NAME_ENTRY); }),
 };
 
 void setup() {
@@ -104,14 +150,15 @@ void setup() {
   sleep_init();
   fuel_gauge_init();
   fuel_gauge_update();
+
+  wifi_manager_start();     // begin connecting; logo screen polls completion
+  game_controller.start();  // drives all phase transitions
 }
 
 unsigned long last_game_update = 0;
 const unsigned long interval_game_update = 1000000 / 30;
-
 unsigned long last_display_refresh = 0;
 const unsigned long interval_display_refresh = 1000000 / 30;
-
 unsigned long last_fg_update = -9000;
 const unsigned long interval_fg_update = 10000;
 
@@ -119,13 +166,13 @@ void loop() {
   unsigned long current_micros = micros();
   unsigned long current_millis = millis();
 
-  // Poll input every spin; draw/SPI only on a timer so encoder isn't starved.
   input_update();
   wifi_manager_update();
 
   if (current_micros - last_game_update >= interval_game_update) {
     last_game_update = current_micros;
     currentScreen->update();
+    game_controller.update();
     game_rate_update();
   }
 
@@ -133,7 +180,6 @@ void loop() {
     return;
 
   last_display_refresh = current_micros;
-
   display.fillScreen(WHITE);
 
   if (current_millis - last_fg_update >= interval_fg_update) {
@@ -152,6 +198,5 @@ void loop() {
   display_refresh_dirty();
   refresh_rate_update(micros() - t0);
 
-  // Encoder count is IRQ-backed; read again after blocking SPI.
   input_update();
 }

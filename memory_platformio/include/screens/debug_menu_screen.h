@@ -85,13 +85,22 @@ public:
     items = items_;
     item_count = count;
 
-    int max_len = 0;
+    int col1_count = (item_count + 1) / 2;
+    int max_len_col1 = 0;
+    int max_len_col2 = 0;
     for (int i = 0; i < item_count; i++) {
       int l = strlen(items[i].label);
-      if (l > max_len)
-        max_len = l;
+      if (i < col1_count) {
+        if (l > max_len_col1)
+          max_len_col1 = l;
+      } else {
+        if (l > max_len_col2)
+          max_len_col2 = l;
+      }
     }
+
     for (int i = 0; i < item_count; i++) {
+      int max_len = (i < col1_count) ? max_len_col1 : max_len_col2;
       int l = strlen(items[i].label);
       int pad = max_len - l;
       int capacity = (int)sizeof(items[i].label_fixed_width) - 1;
@@ -148,14 +157,14 @@ public:
   }
 
   void draw() const {
-    // display.drawRect(20, 20, SCREEN_WIDTH - 40, SCREEN_HEIGHT - 40, BLACK);
     display.setTextSize(1);
     display.setTextColor(BLACK);
-    // display.setCursor(40, 40);
-    // display.print("DEBUG MENU");
-    int border = 5;
-    int row_y = border;
+    const int border = 5;
+    const int row_h = font_height + 6;
+    const int col1_count = (item_count + 1) / 2;
+    const int col2_x = SCREEN_WIDTH_HALF + border;
     char row_buf[32];
+
     for (int i = 0; i < item_count; i++) {
       if (items[i].value_ptr) {
         bool editing_this = (_editing && i == selected_index);
@@ -170,9 +179,12 @@ public:
         snprintf(row_buf, sizeof(row_buf), "%s - %s", items[i].label_fixed_width,
                  items[i].enabled ? " ON" : "OFF");
       }
-      draw_text_block(row_buf, border, row_y,
-                      i == selected_index ? WHITE : BLACK);
-      row_y += font_height + 6;
+
+      const int col = (i < col1_count) ? 0 : 1;
+      const int row = (col == 0) ? i : (i - col1_count);
+      const int x = (col == 0) ? border : col2_x;
+      const int y = border + row * row_h;
+      draw_text_block(row_buf, x, y, i == selected_index ? WHITE : BLACK);
     }
   }
 };

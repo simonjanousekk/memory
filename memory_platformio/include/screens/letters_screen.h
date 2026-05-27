@@ -34,6 +34,7 @@ class LettersScreen : public Screen {
       }
       display.setTextSize(1);
       display.setTextColor(c);
+      display.setFont(&FreeMonoBold9pt7b);
       display.setCursor(x + 3, y + 16 - 3);
       display.print(letter);
 
@@ -157,9 +158,9 @@ class LettersScreen : public Screen {
   }
 
  public:
-  ScreenMode id()          const override { return SCREEN_LETTERS; }
-  bool       is_complete() const override { return _timer.won; }
-  uint32_t   finish_ms()   const override { return _timer.finish_ms; }
+  ScreenMode id() const override { return SCREEN_LETTERS; }
+  bool is_complete() const override { return _timer.won; }
+  uint32_t finish_ms() const override { return _timer.finish_ms; }
 
   void on_enter() override {
     generate_grid();
@@ -167,7 +168,7 @@ class LettersScreen : public Screen {
   }
 
   void on_button_a() override { zap(); }
-  void on_button_b() override { on_enter(); }
+  // void on_button_b() override { on_enter(); }
 
   void on_encoder_rotate(int delta) override {
     for (int r = 0; r < GRID_ROWS; r++) {
@@ -186,7 +187,6 @@ class LettersScreen : public Screen {
         grid[c][r].draw();
       }
     }
-
   }
 };
 

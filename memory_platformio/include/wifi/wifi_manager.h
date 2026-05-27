@@ -7,12 +7,6 @@
 #include <wifi/wifi_credentials.h>
 
 #define WIFI_PER_NETWORK_TIMEOUT_MS 4000
-#define SUPABASE_URL = "https://kfigagoyhqrnlbgnaibh.supabase.co/rest/v1/test'"
-#define SUPABASE_API_KEY                                                       \
-  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."                                    \
-    "eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtmaWdhZ295aHFybmxiZ25haWJoIiwicm9sZSI6" \
-    "ImFub24iLCJpYXQiOjE3Nzc5NzkxMTEsImV4cCI6MjA5MzU1NTExMX0.AmHT_"            \
-    "Joc5XUc8Yq0Nwbdpcdm-RHT3TgWPU_taDd2O2M"
 
 // ---------------------------------------------------------------------------
 // State
@@ -98,6 +92,9 @@ void wifi_manager_update() {
 // ---------------------------------------------------------------------------
 // Debug overlay — render callback for DebugMenuItem
 // ---------------------------------------------------------------------------
+// Returns true once all networks have been tried and none succeeded.
+bool wifi_manager_failed() { return _wifi_state == WIFI_TEST_FAILED; }
+
 void wifi_debug_display(char *buf, int len) {
   switch (_wifi_state) {
   case WIFI_TEST_IDLE:

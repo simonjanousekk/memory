@@ -5,15 +5,25 @@
 // ScreenMode — add a new value here for every new screen.
 // ---------------------------------------------------------------------------
 enum ScreenMode {
+  // Dev / utility screens
   SCREEN_BOB = 0,
   SCREEN_ZAJAC,
   SCREEN_DEBUG_MENU,
   SCREEN_GRID,
+  // Minigames
   SCREEN_MAZE,
   SCREEN_LETTERS,
-  // SCREEN_SIMONSAYS,
-  SCREEN_LOGO,
   SCREEN_COUNT,
+  // Game flow screens
+  SCREEN_LOGO,
+  SCREEN_INTRO,
+  SCREEN_OPPONENT,
+  SCREEN_RESULT,
+  SCREEN_GO_AGAIN,
+  SCREEN_NAME_ENTRY,
+  SCREEN_UPLOAD,
+  SCREEN_GOODBYE,
+  SCREEN_TEST,
 };
 
 // ---------------------------------------------------------------------------
@@ -37,11 +47,12 @@ class Screen {
   virtual void on_encoder_press() {}
   virtual void on_encoder_rotate(int delta) {}
 
-  // Optional — minigame screens override these so the game controller
-  // can detect completion and read the final time without knowing the
-  // concrete screen type. Non-minigame screens leave the defaults.
-  virtual bool     is_complete() const { return false; }
-  virtual uint32_t finish_ms()   const { return 0; }
+  // Optional — screens override these for game-controller integration.
+  // Non-interactive screens leave the defaults (false / 0 / 0).
+  virtual bool is_complete() const { return false; }
+  virtual uint32_t finish_ms() const { return 0; }
+  // For branching screens (e.g. GoAgain): return 0 = primary, 1 = alternate.
+  virtual int complete_result() const { return 0; }
 
   void ensure_init() {
     if (!_initialized) {

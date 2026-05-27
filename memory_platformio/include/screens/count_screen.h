@@ -164,9 +164,9 @@ class CountScreen : public Screen {
   TimedGame _timer;
 
  public:
-  ScreenMode id()          const override { return SCREEN_COUNT; }
-  bool       is_complete() const override { return _timer.won; }
-  uint32_t   finish_ms()   const override { return _timer.finish_ms; }
+  ScreenMode id() const override { return SCREEN_COUNT; }
+  bool is_complete() const override { return _timer.won; }
+  uint32_t finish_ms() const override { return _timer.finish_ms; }
 
   void on_enter() override {
     randomSeed(g_game_seed);
@@ -180,7 +180,9 @@ class CountScreen : public Screen {
       all_shapes[i] = Shape(main_shape_type);
     }
     for (int i = main_shape_count; i < all_shapes_count; i++) {
-      all_shapes[i] = Shape();
+      ShapeType t;
+      do { t = random_shape(); } while (t == main_shape_type);
+      all_shapes[i] = Shape(t);
     }
 
     int step = field_height / all_bars_count;
@@ -192,16 +194,19 @@ class CountScreen : public Screen {
     _timer.begin();
   }
 
-  void on_button_a() override {
+  void on_button_b() override {
     if (_timer.won) return;
     if (selected_count == main_shape_count) {
       _timer.complete();
     } else {
       _timer.add_penalty();
+      Serial.println("Penalty");
+      Serial.println(selected_count);
+      Serial.println(main_shape_count);
     }
   }
 
-  void on_button_b() override { on_enter(); }
+  // void on_button_b() override { on_enter(); }
 
   void on_encoder_rotate(int delta) override {
     selected_count += delta;
@@ -247,7 +252,6 @@ class CountScreen : public Screen {
     display.fillCircle(bottom_center_x, bottom_center_y, 2, BLACK);
     display.drawBitmap(bottom_center_x + 16, bottom_center_y - 16, number_sprites[selected_count], 32, 32, BLACK);
     main_shape.draw_at(bottom_center_x - 32, bottom_center_y, 32);
-
   }
 };
 

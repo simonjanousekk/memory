@@ -93,9 +93,9 @@ class MazeScreen : public Screen {
   }
 
  public:
-  ScreenMode id()          const override { return SCREEN_MAZE; }
-  bool       is_complete() const override { return _timer.won; }
-  uint32_t   finish_ms()   const override { return _timer.finish_ms; }
+  ScreenMode id() const override { return SCREEN_MAZE; }
+  bool is_complete() const override { return _timer.won; }
+  uint32_t finish_ms() const override { return _timer.finish_ms; }
 
   void on_enter() override {
     maze.generate(g_game_seed);
@@ -105,7 +105,7 @@ class MazeScreen : public Screen {
   }
 
   void on_encoder_rotate(int delta) override { _angle += delta * ROT_STEP; }
-  void on_button_b() override { on_enter(); }
+  // void on_button_b() override { on_enter(); }
 
   void update() override {
     if (_timer.won)
@@ -136,7 +136,6 @@ class MazeScreen : public Screen {
     background.draw(RADIAL);
     maze.draw(_angle);
     dot.draw(_angle, HW, HH, (int)DOT_R);
-
   }
 };
 
