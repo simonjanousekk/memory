@@ -1,89 +1,53 @@
 <script>
-  import svelteLogo from './assets/svelte.svg'
-  import viteLogo from './assets/vite.svg'
-  import heroImg from './assets/hero.png'
-  import Counter from './lib/Counter.svelte'
+  // import svelteLogo from './assets/svelte.svg'
+  // import viteLogo from './assets/vite.svg'
+  // import heroImg from './assets/hero.png'
+  // import Counter from './lib/Counter.svelte'
+  import logo from "./assets/tot-m2_logo.svg";
+  import blueprint_1 from "./assets/blueprint_1.png";
+  import blueprint_2 from "./assets/blueprint_2.png";
+  import htp_maze from "./assets/htp_maze.svg";
+  import htp_words from "./assets/htp_word.svg";
+  import htp_shape from "./assets/htp_shape.svg";
 </script>
 
-<section id="center">
-  <div class="hero">
-    <img src={heroImg} class="base" width="170" height="179" alt="" />
-    <img src={svelteLogo} class="framework" alt="Svelte logo" />
-    <img src={viteLogo} class="vite" alt="Vite logo" />
-  </div>
-  <div>
-    <h1>Get started</h1>
-    <p>Edit <code>src/App.svelte</code> and save to test <code>HMR</code></p>
-  </div>
-  <Counter />
-</section>
+<div class="logo">
+  <img src={logo} alt="logo" />
+</div>
 
-<div class="ticks"></div>
+<div class="anotace">
+  <p>
+    Pocket video-game console tot–M❷ [totem dva] is a new custom platform for
+    developing tactile “mobile” games.Main feature is asynchronous multiplayer,
+    allowing users to play against real players, without the need to meet up or
+    play at the same time. Equipped with rotary encoder, 2 mechanical
+    key-switches, low power Sharp Memory LCD display, ESP-32, usb-c, wifi,
+    bluetooth, can last over 12 hours on a single battery charge.
+  </p>
+</div>
 
-<section id="next-steps">
-  <div id="docs">
-    <svg class="icon" role="presentation" aria-hidden="true">
-      <use href="/icons.svg#documentation-icon"></use>
-    </svg>
-    <h2>Documentation</h2>
-    <p>Your questions, answered</p>
-    <ul>
-      <li>
-        <a href="https://vite.dev/" target="_blank" rel="noreferrer">
-          <img class="logo" src={viteLogo} alt="" />
-          Explore Vite
-        </a>
-      </li>
-      <li>
-        <a href="https://svelte.dev/" target="_blank" rel="noreferrer">
-          <img class="button-icon" src={svelteLogo} alt="" />
-          Learn more
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div id="social">
-    <svg class="icon" role="presentation" aria-hidden="true">
-      <use href="/icons.svg#social-icon"></use>
-    </svg>
-    <h2>Connect with us</h2>
-    <p>Join the Vite community</p>
-    <ul>
-      <li>
-        <a href="https://github.com/vitejs/vite" target="_blank" rel="noreferrer">
-          <svg class="button-icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#github-icon"></use>
-          </svg>
-          GitHub
-        </a>
-      </li>
-      <li>
-        <a href="https://chat.vite.dev/" target="_blank" rel="noreferrer">
-          <svg class="button-icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#discord-icon"></use>
-          </svg>
-          Discord
-        </a>
-      </li>
-      <li>
-        <a href="https://x.com/vite_js" target="_blank" rel="noreferrer">
-          <svg class="button-icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#x-icon"></use>
-          </svg>
-          X.com
-        </a>
-      </li>
-      <li>
-        <a href="https://bsky.app/profile/vite.dev" target="_blank" rel="noreferrer">
-          <svg class="button-icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#bluesky-icon"></use>
-          </svg>
-          Bluesky
-        </a>
-      </li>
-    </ul>
-  </div>
-</section>
+<div class="blueprint">
+  <img src={blueprint_1} alt="blueprint_1" />
+  <img src={blueprint_2} alt="blueprint_2" />
+</div>
 
-<div class="ticks"></div>
-<section id="spacer"></section>
+<div class="howtoplay">
+  <div class="text">
+    <h4>how to play</h4>
+    <p>
+      Compete with previous players in 3 simple minigames. When you win, you
+      move up on the leaderboard and vice versa. You can play as many times as
+      you want, with the risk of losing your ranking!
+    </p>
+  </div>
+  <img src={htp_maze} alt="htp_maze" />
+  <img src={htp_words} alt="htp_words" />
+  <img src={htp_shape} alt="htp_shape" />
+</div>
+
+<div class="leaderboard">
+  <div class="text">
+    <h4>leaderboard</h4>
+    <p>nevim co to bude</p>
+  </div>
+</div>
