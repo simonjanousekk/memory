@@ -3,6 +3,7 @@
   import logo from "./assets/tot-m2_logo.svg";
   import blueprint_1 from "./assets/blueprint_1.png";
   import blueprint_2 from "./assets/blueprint_2.png";
+  import pcb from "./assets/pcb.svg";
   import htp_maze from "./assets/htp_maze.svg";
   import htp_words from "./assets/htp_word.svg";
   import htp_shape from "./assets/htp_shape.svg";
@@ -49,11 +50,12 @@
 <div class="anotace">
   <p>
     Pocket video-game console tot–M❷ [totem dva] is a new custom platform for
-    developing tactile “mobile” games.Main feature is asynchronous multiplayer,
-    allowing users to play against real players, without the need to meet up or
-    play at the same time. Equipped with rotary encoder, 2 mechanical
-    key-switches, low power Sharp Memory LCD display, ESP-32, usb-c, wifi,
-    bluetooth, can last over 12 hours on a single battery charge.
+    developing tactile mobile games. Its main feature is asynchronous
+    multiplayer, which allows users to play against real people without needing
+    to meet up or be online at the same time. Equipped with a rotary encoder,
+    two mechanical key-switches, a low-power Sharp Memory LCD display, an ESP32,
+    usb-c, Wi-Fi, and bluetooth, it can last over 12 hours on a single battery
+    charge.
   </p>
 </div>
 
