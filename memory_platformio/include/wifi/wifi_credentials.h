@@ -5,14 +5,14 @@
 #define WIFI_CREDENTIALS_H
 
 struct WifiCredential {
-  const char *ssid;
-  const char *password;
+  const char* ssid;
+  const char* password;
 };
 
 static const WifiCredential WIFI_NETWORKS[] = {
-    {"vsup-vr", "UMPRUMVirtualRealityNetwork"},
+    {"vsup", "Eiffel.115"},
     {"Zavadilka", "nazavadilce1434"},
-    {"vsup", "Eiffel.115"}
+    {"vsup-vr", "UMPRUMVirtualRealityNetwork"}
     // {"school_network", "school_password"},
 };
 

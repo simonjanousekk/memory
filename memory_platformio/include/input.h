@@ -62,7 +62,7 @@ void input_init() {
   button_a.attachPress([]() { currentScreen->on_button_a(); });
   button_b.attachPress([]() { currentScreen->on_button_b(); });
 
-  // button_e.attachPress([]() { currentScreen->on_encoder_press(); });
+  button_e.attachPress([]() { currentScreen->on_encoder_press(); });
   // button_e.attachLongPressStart([]() { cycle_screen(); });
   // button_e.attachPress([]() { cycle_screen(); });
 }

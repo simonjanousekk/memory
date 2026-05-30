@@ -12,12 +12,10 @@
 #include <screens/maze/maze_screen.h>
 // Game flow screens
 #include <screens/flow/go_again_screen.h>
-#include <screens/flow/goodbye_screen.h>
 #include <screens/flow/intro_screen.h>
 #include <screens/flow/name_entry_screen.h>
 #include <screens/flow/opponent_screen.h>
 #include <screens/flow/round_result_screen.h>
-#include <screens/flow/upload_screen.h>
 // Dev / utility screens
 #include <screens/bob_screen.h>
 #include <screens/debug_menu_screen.h>
@@ -40,8 +38,6 @@ OpponentScreen screen_opponent;
 RoundResultScreen screen_result;
 GoAgainScreen screen_go_again;
 NameEntryScreen screen_name_entry;
-UploadScreen screen_upload;
-GoodbyeScreen screen_goodbye;
 // Dev / utility
 BobScreen screen_bob;
 ZajacScreen screen_zajac;
@@ -86,12 +82,6 @@ void set_screen(ScreenMode mode) {
     case SCREEN_NAME_ENTRY:
       currentScreen = &screen_name_entry;
       break;
-    case SCREEN_UPLOAD:
-      currentScreen = &screen_upload;
-      break;
-    case SCREEN_GOODBYE:
-      currentScreen = &screen_goodbye;
-      break;
     // Dev / utility
     case SCREEN_BOB:
       currentScreen = &screen_bob;
@@ -132,9 +122,9 @@ DebugMenuItem debug_items[] = {
     DebugMenuItem("-> Bob", []() { set_screen(SCREEN_BOB); }),
     DebugMenuItem("-> Zajac", []() { set_screen(SCREEN_ZAJAC); }),
     DebugMenuItem("-> Grid", []() { set_screen(SCREEN_GRID); }),
-    DebugMenuItem("-> Logo", []() { set_screen(SCREEN_LOGO); }),
+    DebugMenuItem("-> Logo", []() { logo_set_mode(LOGO_BOOT); set_screen(SCREEN_LOGO); }),
     DebugMenuItem("-> Test", []() { set_screen(SCREEN_TEST); }),
-    DebugMenuItem("-> Name Entry", []() { set_screen(SCREEN_NAME_ENTRY); }),
+    DebugMenuItem("-> Name Entry", []() { game_controller.advance(PHASE_NAME_ENTRY); }),
 };
 
 void setup() {

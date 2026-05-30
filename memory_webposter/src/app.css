@@ -83,6 +83,7 @@ h4 {
 }
 
 .blueprint > img,
+.blueprint > video,
 .howtoplay > *,
 .leaderboard > * {
   width: calc(50% - 20px);

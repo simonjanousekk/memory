@@ -5,6 +5,7 @@
 #include <game_seed.h>
 #include <game_state.h>
 #include <screen.h>
+#include <screens/logo_screen.h>
 
 // ---------------------------------------------------------------------------
 // GamePhase — one value per step in the game flow.
@@ -19,8 +20,6 @@ enum GamePhase {
   PHASE_RESULT,
   PHASE_GO_AGAIN,
   PHASE_NAME_ENTRY,
-  PHASE_UPLOAD,
-  PHASE_GOODBYE,
 };
 
 // Maps each phase to the ScreenMode that should be active during it.
@@ -35,8 +34,6 @@ static ScreenMode _phase_screen(GamePhase p) {
     case PHASE_RESULT:       return SCREEN_RESULT;
     case PHASE_GO_AGAIN:     return SCREEN_GO_AGAIN;
     case PHASE_NAME_ENTRY:   return SCREEN_NAME_ENTRY;
-    case PHASE_UPLOAD:       return SCREEN_UPLOAD;
-    case PHASE_GOODBYE:      return SCREEN_GOODBYE;
   }
   return SCREEN_LOGO;
 }
@@ -61,7 +58,10 @@ struct GameController {
   GamePhase phase           = PHASE_LOGO;
   bool      _tutorial_done = false;  // true after the first solo run
 
-  void start() { advance(PHASE_LOGO); }
+  void start() {
+    logo_set_mode(LOGO_BOOT);
+    advance(PHASE_LOGO);
+  }
 
   void advance(GamePhase next) {
     phase = next;
@@ -92,10 +92,15 @@ struct GameController {
 
       // ---- Boot (logo plays + leaderboard fetched inside LogoScreen) --------
       case PHASE_LOGO:
-        session.offline = (WiFi.status() != WL_CONNECTED);
-        session.begin(leaderboard_size > 0 ? leaderboard_size / 2 + 1 : 1);
-        _tutorial_done  = false;
-        advance(PHASE_INTRO);
+        if (screen_logo.is_save_mode()) {
+          logo_set_mode(LOGO_BOOT);
+          advance(PHASE_LOGO);
+        } else {
+          session.offline = (WiFi.status() != WL_CONNECTED);
+          session.begin(leaderboard_size > 0 ? leaderboard_size / 2 + 1 : 1);
+          _tutorial_done = false;
+          advance(PHASE_INTRO);
+        }
         break;
 
       // ---- Session start ---------------------------------------------------
@@ -158,17 +163,9 @@ struct GameController {
           advance(PHASE_NAME_ENTRY);
         break;
 
-      // ---- Save ------------------------------------------------------------
+      // ---- Save + farewell -------------------------------------------------
       case PHASE_NAME_ENTRY:
-        advance(PHASE_UPLOAD);
-        break;
-
-      case PHASE_UPLOAD:
-        advance(PHASE_GOODBYE);
-        break;
-
-      // ---- Done ------------------------------------------------------------
-      case PHASE_GOODBYE:
+        logo_set_mode(LOGO_SAVE);
         advance(PHASE_LOGO);
         break;
     }
