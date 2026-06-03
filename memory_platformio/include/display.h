@@ -97,14 +97,23 @@ class ExtGFXcanvas1 : public GFXcanvas1 {
     }
   }
 
-  void drawTextCentered(String text, int x, int y, bool color = WHITE) {
+  void drawTextCentered(String text, int x, int y, bool color = WHITE, bool bg = false, bool border = false, int border_size = 2) {
     int16_t x1, y1;
     uint16_t w, h;
     // Measure at a safe y to avoid negative coordinate artefacts.
-    getTextBounds(text, 0, 100, &x1, &y1, &w, &h);
-    int ascent = 100 - y1;
-    // x1 offset (relative to cursor x=0) accounts for left-side bearing.
-    setCursor(x - w / 2 - x1, y - h / 2 + ascent);
+    const int16_t measure_y = 100;
+    getTextBounds(text, 0, measure_y, &x1, &y1, &w, &h);
+    const int16_t ascent = measure_y - y1;
+    // (x, y) = center of the text bounding box; cursor accounts for bearing.
+    const int16_t cx = x - w / 2 - x1;
+    const int16_t cy = y - h / 2 + ascent;
+    if (bg) {
+      fillRect(x - w / 2 - border_size, y - h / 2 - border_size, w + border_size * 2, h + border_size * 2, !color);
+    }
+    if (border) {
+      drawRect(x - w / 2 - border_size, y - h / 2 - border_size, w + border_size * 2, h + border_size * 2, color);
+    }
+    setCursor(cx, cy);
     setTextColor(color);
     print(text);
   }

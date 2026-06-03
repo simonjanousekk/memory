@@ -420,7 +420,7 @@ const uint8_t* const cell_bayer_all[] PROGMEM = {
     cell_bayer_0, cell_bayer_1, cell_bayer_2, cell_bayer_3, cell_bayer_4,
     cell_bayer_5, cell_bayer_6, cell_bayer_7, cell_bayer_8};
 
-const int cell_bayer_peak_count = 41;
+const int cell_bayer_peak_count = 48;
 
 const uint8_t* const cell_bayer_peak[] PROGMEM = {
     cell_bayer_0,
@@ -432,6 +432,13 @@ const uint8_t* const cell_bayer_peak[] PROGMEM = {
     cell_bayer_6,
     cell_bayer_7,
 
+    cell_bayer_8,
+    cell_bayer_8,
+    cell_bayer_8,
+    cell_bayer_8,
+    cell_bayer_8,
+    cell_bayer_8,
+    cell_bayer_8,
     cell_bayer_8,
     cell_bayer_8,
     cell_bayer_8,

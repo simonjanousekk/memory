@@ -104,6 +104,7 @@ void set_screen(ScreenMode mode) {
   }
   currentScreen->ensure_init();
   currentScreen->on_enter();
+  screen_note_entered();
 }
 
 // ---------------------------------------------------------------------------
@@ -125,6 +126,7 @@ DebugMenuItem debug_items[] = {
     DebugMenuItem("-> Logo", []() { logo_set_mode(LOGO_BOOT); set_screen(SCREEN_LOGO); }),
     DebugMenuItem("-> Test", []() { set_screen(SCREEN_TEST); }),
     DebugMenuItem("-> Name Entry", []() { game_controller.advance(PHASE_NAME_ENTRY); }),
+    DebugMenuItem("-> Go Again", []() { game_controller.advance(PHASE_GO_AGAIN); }),
 };
 
 void setup() {
@@ -136,6 +138,7 @@ void setup() {
   display_init();
   currentScreen->ensure_init();
   currentScreen->on_enter();
+  screen_note_entered();
   input_init();
   sleep_init();
   fuel_gauge_init();
@@ -180,7 +183,7 @@ void loop() {
   currentScreen->draw();
 
   if (currentScreen->id() != SCREEN_DEBUG_MENU) {
-    battery_display();
+    // battery_display();
     debug_menu.render_overlays();
   }
 

@@ -92,21 +92,20 @@ struct GameController {
 
       // ---- Boot (logo plays + leaderboard fetched inside LogoScreen) --------
       case PHASE_LOGO:
-        if (screen_logo.is_save_mode()) {
-          logo_set_mode(LOGO_BOOT);
-          advance(PHASE_LOGO);
-        } else {
-          session.offline = (WiFi.status() != WL_CONNECTED);
-          session.begin(leaderboard_size > 0 ? leaderboard_size / 2 + 1 : 1);
-          _tutorial_done = false;
-          advance(PHASE_INTRO);
-        }
+        // Boot logo: fetch only. Save logo: upload + fetch — then new session.
+        session.offline = (WiFi.status() != WL_CONNECTED) || !supabase_leaderboard_valid();
+        session.begin(supabase_default_start_rank());
+        _tutorial_done = false;
+        logo_set_mode(LOGO_BOOT);
+        advance(PHASE_INTRO);
         break;
 
       // ---- Session start ---------------------------------------------------
       case PHASE_INTRO:
         if (!_tutorial_done) {
-          // First run: solo with random seeds — populates DB with fresh seeds.
+          // Solo tutorial — no opponent targets.
+          opponent_targets.valid = false;
+          current_round = RoundState{};
           current_round.opponent_idx        = -1;
           current_round.maze_seed           = esp_random();
           current_round.maze_opponent_time  = UINT32_MAX;
@@ -114,7 +113,7 @@ struct GameController {
           current_round.words_opponent_time = UINT32_MAX;
           current_round.count_seed          = esp_random();
           current_round.count_opponent_time = UINT32_MAX;
-          advance(PHASE_MAZE);   // solo: skip opponent screen
+          advance(PHASE_MAZE);
         } else {
           advance(PHASE_OPPONENT);
         }
@@ -144,6 +143,7 @@ struct GameController {
           _tutorial_done = true;
           advance(PHASE_OPPONENT);
         } else {
+          opponent_targets.apply_to(current_round);
           current_round.compute();
           session.commit_round(current_round, leaderboard_size);
           advance(PHASE_RESULT);

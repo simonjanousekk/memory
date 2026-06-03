@@ -58,9 +58,9 @@ struct TimedGame {
   }
 };
 
-// Format raw ms for display. UINT32_MAX = no reference time → "---".
+// Format raw ms for display. 0 / UINT32_MAX = no reference time → "---".
 static inline String format_ms(uint32_t ms) {
-  if (ms == UINT32_MAX) return "---";
+  if (ms == 0 || ms == UINT32_MAX) return "---";
   return String(ms / 1000) + "." + String((ms % 1000) / 100) + "s";
 }
 
@@ -115,6 +115,32 @@ struct RoundState {
     gp.words_seed = words_seed;  gp.words_time = words_player_time;
     gp.count_seed = count_seed;  gp.count_time = count_player_time;
     return gp;
+  }
+};
+
+// Opponent target times picked on OpponentScreen — restored before scoring
+// so tutorial UINT32_MAX placeholders cannot leak into battle results.
+struct OpponentTargets {
+  bool     valid       = false;
+  int      opponent_idx = -1;
+  uint32_t maze_time   = 0;
+  uint32_t words_time  = 0;
+  uint32_t count_time  = 0;
+
+  void capture(const RoundState& r) {
+    valid        = (r.maze_opponent_time != UINT32_MAX);
+    opponent_idx = r.opponent_idx;
+    maze_time    = r.maze_opponent_time;
+    words_time   = r.words_opponent_time;
+    count_time   = r.count_opponent_time;
+  }
+
+  void apply_to(RoundState& r) const {
+    if (!valid) return;
+    r.opponent_idx        = opponent_idx;
+    r.maze_opponent_time  = maze_time;
+    r.words_opponent_time = words_time;
+    r.count_opponent_time = count_time;
   }
 };
 
@@ -179,5 +205,6 @@ LeaderboardEntry leaderboard[MAX_PLAYERS];
 int              leaderboard_size = 0;
 Session          session;
 RoundState       current_round;
+OpponentTargets  opponent_targets;
 
 #endif

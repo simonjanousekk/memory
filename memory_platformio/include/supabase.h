@@ -27,23 +27,33 @@ static void _sb_auth(HTTPClient& http) {
   http.addHeader("Authorization", "Bearer " SUPABASE_ANON_KEY);
 }
 
-// ---------------------------------------------------------------------------
-// supabase_fetch_leaderboard
-//
-// GET /rest/v1/players?order=rank.asc&select=*
-// Fills the global leaderboard[] array and sets leaderboard_size.
-// Returns true on success.
-// ---------------------------------------------------------------------------
-bool supabase_fetch_leaderboard() {
+static void _sb_timeouts(HTTPClient& http) {
+  http.setConnectTimeout(10000);
+  http.setTimeout(20000);
+}
+
+static bool _leaderboard_valid = false;
+
+bool supabase_leaderboard_valid() { return _leaderboard_valid; }
+
+// Mid-board start rank; only call after a successful fetch (or valid cached data).
+int supabase_default_start_rank() {
+  if (!_leaderboard_valid || leaderboard_size <= 0) return 1;
+  return leaderboard_size / 2 + 1;
+}
+
+static bool _fetch_leaderboard_once() {
   WiFiClientSecure client;
-  client.setInsecure();   // skip certificate verification (anon key is the auth)
+  client.setInsecure();
 
   HTTPClient http;
   http.begin(client, SUPABASE_HOST "/rest/v1/players?order=rank.asc&select=*");
   _sb_auth(http);
+  _sb_timeouts(http);
 
   int code = http.GET();
   if (code != 200) {
+    Serial.printf("[fetch] HTTP %d\n", code);
     http.end();
     return false;
   }
@@ -51,16 +61,29 @@ bool supabase_fetch_leaderboard() {
   String payload = http.getString();
   http.end();
 
+  if (payload.isEmpty()) {
+    Serial.println("[fetch] empty body");
+    return false;
+  }
+
   JsonDocument doc;
   DeserializationError err = deserializeJson(doc, payload);
-  if (err) return false;
+  if (err) {
+    Serial.printf("[fetch] JSON %s (%u bytes)\n", err.c_str(), (unsigned)payload.length());
+    return false;
+  }
+
+  if (!doc.is<JsonArray>()) {
+    Serial.println("[fetch] not a JSON array");
+    return false;
+  }
 
   JsonArray arr = doc.as<JsonArray>();
-  leaderboard_size = 0;
+  int parsed = 0;
 
   for (JsonObject player : arr) {
-    if (leaderboard_size >= MAX_PLAYERS) break;
-    LeaderboardEntry& e = leaderboard[leaderboard_size];
+    if (parsed >= MAX_PLAYERS) break;
+    LeaderboardEntry& e = leaderboard[parsed];
 
     const char* n = player["name"] | "?";
     strncpy(e.name, n, sizeof(e.name) - 1);
@@ -82,23 +105,65 @@ bool supabase_fetch_leaderboard() {
       gp.count_time   = g["count_time"] | (uint32_t)0;
     }
 
-    leaderboard_size++;
+    parsed++;
   }
 
-  return leaderboard_size > 0;
+  leaderboard_size = parsed;
+  _leaderboard_valid = true;
+  Serial.printf("[fetch] ok players=%d\n", leaderboard_size);
+  return true;
+}
+
+// ---------------------------------------------------------------------------
+// supabase_fetch_leaderboard
+//
+// GET /rest/v1/players?order=rank.asc&select=*
+// Retries on failure; keeps the last good leaderboard if a refresh fails.
+// ---------------------------------------------------------------------------
+bool supabase_fetch_leaderboard() {
+  static constexpr int kRetries = 3;
+
+  for (int attempt = 1; attempt <= kRetries; attempt++) {
+    if (_fetch_leaderboard_once()) return true;
+    if (attempt < kRetries) {
+      Serial.printf("[fetch] retry %d/%d\n", attempt, kRetries);
+      delay(600);
+    }
+  }
+
+  if (_leaderboard_valid) {
+    Serial.printf("[fetch] refresh failed, keeping %d players\n", leaderboard_size);
+    return true;
+  }
+
+  Serial.println("[fetch] failed, no cached leaderboard");
+  return false;
 }
 
 // ---------------------------------------------------------------------------
 // supabase_insert_player
 //
-// POST /rest/v1/rpc/insert_player
-// Calls the SECURITY DEFINER RPC that atomically shifts existing ranks and
-// inserts the new entry.  Returns true on HTTP 200/201/204.
+// POST /functions/v1/insert-player
+// Edge Function sanitizes the name, then calls insert_player RPC server-side.
+// Returns true on HTTP 200/201/204.
 // ---------------------------------------------------------------------------
 bool supabase_insert_player(const char* name, int rank,
                             const GamePair* rounds, uint8_t rounds_count,
                             bool is_ghost = false) {
+  if (!name || name[0] == '\0') {
+    Serial.println("[upload] aborted: empty name");
+    return false;
+  }
+  if (rounds_count == 0) {
+    Serial.println("[upload] aborted: no rounds to save");
+    return false;
+  }
+
+  // ~80 bytes per round + overhead; avoid heap JsonDocument overallocation failures.
+  const size_t cap = 192 + (size_t)rounds_count * 96;
   JsonDocument doc;
+  doc.to<JsonObject>();
+
   doc["p_name"]     = name;
   doc["p_rank"]     = rank;
   doc["p_is_ghost"] = is_ghost;
@@ -115,20 +180,33 @@ bool supabase_insert_player(const char* name, int rank,
   }
 
   String payload;
-  serializeJson(doc, payload);
+  payload.reserve(cap);
+  size_t len = serializeJson(doc, payload);
+  if (len < 10) {
+    Serial.printf("[upload] aborted: JSON too short (%u)\n", (unsigned)len);
+    return false;
+  }
 
   WiFiClientSecure client;
   client.setInsecure();
 
   HTTPClient http;
-  http.begin(client, SUPABASE_HOST "/rest/v1/rpc/insert_player");
+  http.begin(client, SUPABASE_HOST "/functions/v1/insert-player");
   _sb_auth(http);
+  _sb_timeouts(http);
   http.addHeader("Content-Type", "application/json");
 
   int code = http.POST(payload);
+  // 204 No Content — do not call getString(); it can block forever on ESP32.
+  if (code != 200 && code != 201 && code != 204) {
+    String response = http.getString();
+    Serial.printf("[upload] HTTP %d: %s\n", code, response.c_str());
+    http.end();
+    return false;
+  }
   http.end();
-
-  return code == 200 || code == 201 || code == 204;
+  Serial.printf("[upload] ok HTTP %d\n", code);
+  return true;
 }
 
 #endif

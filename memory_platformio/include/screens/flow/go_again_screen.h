@@ -34,26 +34,45 @@ class GoAgainScreen : public Screen {
     _choice = 0;
   }
 
-  void on_button_a() override {
-    _choice = 1;
-    _done = true;
-  }  // GO AGAIN
-  void on_button_b() override {
-    _choice = 0;
-    _done = true;
-  }  // KEEP
+  void on_button_a() override { _done = true; }
+
+  void on_encoder_rotate(int delta) override {
+    if (delta == 0) return;
+    _choice = (_choice + delta) % 2;
+    if (_choice < 0) _choice += 2;
+  }
 
   bool at_top() const { return session.player_rank == 1; }
 
   void draw() override {
-    display.fillScreen(WHITE);
-    draw_text_block("YOUR RANK: #" + String(session.player_rank), 4, 4);
-    if (at_top())
-      draw_text_block("*** RANK 1 — defend the crown! ***", 4, 24);
-    draw_text_block("rounds this session: " + String(session.rounds_count), 4, 44);
-    draw_text_block("board size: " + String(leaderboard_size), 4, 60);
-    draw_text_block("A = GO AGAIN  (risk your rank)", 4, 88);
-    draw_text_block("B = KEEP RANK (save & quit)", 4, 104);
+    // display.fillScreen(WHITE);
+    // draw_text_block("YOUR RANK: #" + String(session.player_rank), 4, 4);
+    // if (at_top())
+    //   draw_text_block("*** RANK 1 — defend the crown! ***", 4, 24);
+    // draw_text_block("rounds this session: " + String(session.rounds_count), 4, 44);
+    // draw_text_block("board size: " + String(leaderboard_size), 4, 60);
+    // draw_text_block("A = GO AGAIN  (risk your rank)", 4, 88);
+    // draw_text_block("B = KEEP RANK (save & quit)", 4, 104);
+    display.fillScreen(BLACK);
+    display.setFont(&Panell_Extended24pt7b);
+    display.drawTextCentered("go again?", SCREEN_WIDTH_HALF, SCREEN_HEIGHT_HALF - 16, WHITE);
+    display.setFont(&Panell_Regular12pt7b);
+    display.drawTextCentered(
+        "YES",
+        SCREEN_WIDTH_HALF - 32, SCREEN_HEIGHT_HALF + 48,
+        _choice == 1 ? BLACK : WHITE,
+        _choice == 1,
+        // _choice != 1,
+        false,
+        6);
+    display.drawTextCentered(
+        "NO",
+        SCREEN_WIDTH_HALF + 32, SCREEN_HEIGHT_HALF + 48,
+        _choice == 0 ? BLACK : WHITE,
+        _choice == 0,
+        // _choice != 0,
+        false,
+        6);
   }
 };
 

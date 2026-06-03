@@ -63,6 +63,30 @@ class Screen {
 extern Screen* currentScreen;
 extern void set_screen(ScreenMode mode);
 
+// Ignore screen input briefly after enter so a press that caused the
+// transition is not handled again on the new screen. Off for debug menu + minigames.
+static constexpr uint32_t SCREEN_INPUT_BUFFER_MS = 800;
+static unsigned long screen_entered_at_ms = 0;
+
+inline bool screen_input_uses_buffer(ScreenMode mode) {
+  switch (mode) {
+    case SCREEN_DEBUG_MENU:
+    case SCREEN_MAZE:
+    case SCREEN_LETTERS:
+    case SCREEN_COUNT:
+      return false;
+    default:
+      return true;
+  }
+}
+
+inline void screen_note_entered() { screen_entered_at_ms = millis(); }
+
+inline bool screen_input_allowed() {
+  if (!screen_input_uses_buffer(currentScreen->id())) return true;
+  return millis() - screen_entered_at_ms >= SCREEN_INPUT_BUFFER_MS;
+}
+
 // Saved before entering debug menu so we can return to the right screen.
 Screen* previousScreen = nullptr;
 
@@ -72,6 +96,7 @@ void toggle_debug_menu() {
       currentScreen->on_exit();
       currentScreen = previousScreen;
       currentScreen->on_enter();
+      screen_note_entered();
     } else {
       set_screen(SCREEN_BOB);  // fallback if entered without toggle
     }

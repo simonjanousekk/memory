@@ -1,0 +1,5 @@
+# Minimal config for Edge Function deploy.
+# Run from repo root: supabase functions deploy insert-player --project-ref kfigagoyhqrnlbgnaibh
+
+[functions.insert-player]
+verify_jwt = false

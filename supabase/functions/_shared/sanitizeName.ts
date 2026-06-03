@@ -1,9 +1,10 @@
-import { Profanease } from "profanease";
-import { categorized as en } from "profanease/langs/en";
-import csWords from "profanease/langs/cs";
+import { Profanease } from "npm:profanease@2";
+import { categorized as en } from "npm:profanease@2/langs/en";
+import csWords from "npm:profanease@2/langs/cs";
 
-/** Match Czech terms inside nicknames (e.g. kurva123). */
-const csPatterns = csWords.flatMap((word) =>
+/** Keep in sync with memory_webposter/src/lib/sanitizeName.js */
+
+const csPatterns = csWords.flatMap((word: string) =>
   word.includes(" ") ? [word] : [`*${word}*`],
 );
 
@@ -14,13 +15,11 @@ const filter = new Profanease({
   replacement: "asterisk",
 });
 
-/** @param {string} text */
-function collapseRepeatedChars(text) {
+function collapseRepeatedChars(text: string): string {
   return text.replace(/(.)\1+/gi, "$1");
 }
 
-/** @param {string | null | undefined} name */
-export function sanitizeName(name) {
+export function sanitizeName(name: string | null | undefined): string {
   if (!name) return "";
 
   const trimmed = name.trim();
@@ -48,8 +47,8 @@ export function sanitizeName(name) {
   return trimmed;
 }
 
-/** Censored name for display/insert — never empty when input had non-whitespace text. */
-export function censorPlayerName(name) {
+/** Censored name for DB insert — never empty when the device sent non-whitespace text. */
+export function censorPlayerName(name: string | null | undefined): string {
   const trimmed = (name ?? "").trim();
   if (!trimmed) return "";
 

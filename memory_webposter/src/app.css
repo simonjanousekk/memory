@@ -150,3 +150,9 @@ h4 {
 .leaderboard-error {
   color: var(--accent);
 }
+
+.leaderboard > .text {
+  justify-content: space-between;
+}
+.contact {
+}

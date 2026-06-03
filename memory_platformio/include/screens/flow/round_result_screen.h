@@ -32,10 +32,13 @@ class RoundResultScreen : public Screen {
   bool _done = false;
 
  public:
-  ScreenMode id()          const override { return SCREEN_RESULT; }
-  bool       is_complete() const override { return _done; }
+  ScreenMode id() const override { return SCREEN_RESULT; }
+  bool is_complete() const override { return _done; }
 
-  void on_enter()    override { _done = false; }
+  void on_enter() override {
+    _done = false;
+    opponent_targets.apply_to(current_round);
+  }
   void on_button_a() override { _done = true; }
   void on_button_b() override { _done = true; }
 
@@ -46,32 +49,45 @@ class RoundResultScreen : public Screen {
   }
 
   void draw() override {
-    display.fillScreen(WHITE);
-    auto W = [](bool win) -> String { return win ? "W" : "L"; };
-    draw_text_block("RESULT", 4, 4);
-    draw_text_block(
-      "maze:  " + format_ms(current_round.maze_player_time) +
-      " vs " + format_ms(current_round.maze_opponent_time) +
-      "  " + W(current_round.maze_player_time <= current_round.maze_opponent_time),
-      4, 24);
-    draw_text_block(
-      "words: " + format_ms(current_round.words_player_time) +
-      " vs " + format_ms(current_round.words_opponent_time) +
-      "  " + W(current_round.words_player_time <= current_round.words_opponent_time),
-      4, 40);
-    draw_text_block(
-      "count: " + format_ms(current_round.count_player_time) +
-      " vs " + format_ms(current_round.count_opponent_time) +
-      "  " + W(current_round.count_player_time <= current_round.count_opponent_time),
-      4, 56);
-    draw_text_block("score: " + String(current_round.player_wins) + "-" +
-                    String(3 - current_round.player_wins), 4, 76);
-    String arrow = (current_round.rank_delta > 0) ? "UP " : "DN ";
-    draw_text_block(arrow + "#" + String(prev_rank()) + " -> #" +
-                    String(session.player_rank) + "  (" +
-                    String(current_round.rank_delta) + ")", 4, 92);
-    draw_text_block("board: " + String(leaderboard_size), 4, 108);
-    draw_text_block("A to continue", 4, SCREEN_HEIGHT - 16);
+    // display.fillScreen(WHITE);
+    // auto W = [](bool win) -> String { return win ? "W" : "L"; };
+    // draw_text_block("RESULT", 4, 4);
+    // draw_text_block(
+    //   "maze:  " + format_ms(current_round.maze_player_time) +
+    //   " vs " + format_ms(current_round.maze_opponent_time) +
+    //   "  " + W(current_round.maze_player_time <= current_round.maze_opponent_time),
+    //   4, 24);
+    // draw_text_block(
+    //   "words: " + format_ms(current_round.words_player_time) +
+    //   " vs " + format_ms(current_round.words_opponent_time) +
+    //   "  " + W(current_round.words_player_time <= current_round.words_opponent_time),
+    //   4, 40);
+    // draw_text_block(
+    //   "count: " + format_ms(current_round.count_player_time) +
+    //   " vs " + format_ms(current_round.count_opponent_time) +
+    //   "  " + W(current_round.count_player_time <= current_round.count_opponent_time),
+    //   4, 56);
+    // draw_text_block("score: " + String(current_round.player_wins) + "-" +
+    //                 String(3 - current_round.player_wins), 4, 76);
+    // String arrow = (current_round.rank_delta > 0) ? "UP " : "DN ";
+    // draw_text_block(arrow + "#" + String(prev_rank()) + " -> #" +
+    //                 String(session.player_rank) + "  (" +
+    //                 String(current_round.rank_delta) + ")", 4, 92);
+    // draw_text_block("board: " + String(leaderboard_size), 4, 108);
+    // draw_text_block("A to continue", 4, SCREEN_HEIGHT - 16);
+
+    display.fillScreen(BLACK);
+
+    display.setFont(&Panell_Extended24pt7b);
+    display.setTextColor(WHITE);
+    display.drawTextCentered("you're #" + String(session.player_rank), SCREEN_WIDTH_HALF, SCREEN_HEIGHT_HALF - 48, WHITE);
+
+    display.setFont(&Panell_Regular12pt7b);
+    display.drawTextCentered("maze: " + format_ms(current_round.maze_player_time) + " / " + format_ms(current_round.maze_opponent_time) + " - " + (current_round.maze_player_time <= current_round.maze_opponent_time ? "won" : "lost"), SCREEN_WIDTH_HALF, SCREEN_HEIGHT_HALF + 0, WHITE);
+    display.drawTextCentered("words: " + format_ms(current_round.words_player_time) + " / " + format_ms(current_round.words_opponent_time) + " - " + (current_round.words_player_time <= current_round.words_opponent_time ? "won" : "lost"), SCREEN_WIDTH_HALF, SCREEN_HEIGHT_HALF + 24, WHITE);
+    display.drawTextCentered("count: " + format_ms(current_round.count_player_time) + " / " + format_ms(current_round.count_opponent_time) + " - " + (current_round.count_player_time <= current_round.count_opponent_time ? "won" : "lost"), SCREEN_WIDTH_HALF, SCREEN_HEIGHT_HALF + 48, WHITE);
+    String s = "you moved " + String(abs(current_round.rank_delta)) + (abs(current_round.rank_delta) == 1 ? " place " : " places ") + (current_round.rank_delta > 0 ? "up" : "down");
+    display.drawTextCentered(s, SCREEN_WIDTH_HALF, SCREEN_HEIGHT_HALF + 74, WHITE);
   }
 };
 

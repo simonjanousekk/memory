@@ -92,6 +92,10 @@
   <div class="text">
     <h4>leaderboard</h4>
     <!-- <p>Tady by asi mělo být něco napsaný....</p> -->
+    <div class="contact">
+      <p>@simon.janousekk</p>
+      <p>www.simon.janousekk.work</p>
+    </div>
   </div>
   {#if leaderboardError}
     <p class="leaderboard-error">{leaderboardError}</p>
