@@ -153,7 +153,7 @@ const unsigned long interval_game_update = 1000000 / 30;
 unsigned long last_display_refresh = 0;
 const unsigned long interval_display_refresh = 1000000 / 30;
 unsigned long last_fg_update = -9000;
-const unsigned long interval_fg_update = 10000;
+const unsigned long interval_fg_update = 1000;
 
 void loop() {
   unsigned long current_micros = micros();

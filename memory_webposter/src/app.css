@@ -10,15 +10,16 @@
   letter-spacing: 0.18px;
   color-scheme: light dark;
   color: var(--text);
-  background: red;
+  /* background: red; */
+  background: var(--bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  display: flex;
+  /* display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
 }
 
 @font-face {
@@ -154,5 +155,21 @@ h4 {
 .leaderboard > .text {
   justify-content: space-between;
 }
-.contact {
+.contact > .div {
+  display: flex;
+  /* align-items: center; */
+  gap: 10px;
+}
+
+.contact > .div > img {
+  height: 1em;
+  width: 1em;
+  fill: var(--text);
+}
+
+svg {
+  fill: var(--text);
+}
+svg path {
+  fill: var(--text);
 }

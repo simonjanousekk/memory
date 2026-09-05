@@ -8,6 +8,8 @@
   import htp_maze from "./assets/htp_maze.svg";
   import htp_words from "./assets/htp_word.svg";
   import htp_shape from "./assets/htp_shape.svg";
+  import ig_icon from "./assets/noun-ig.svg";
+  import web_icon from "./assets/noun-web.svg";
   import { subscribeLeaderboard } from "./lib/supabase.js";
   import { sanitizeName } from "./lib/sanitizeName.js";
 
