@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S-Lab</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+  <h1>S<span>-Lab</span></h1>
+  <div class="skins" id="skins"></div>
+  <nav class="views">
+    <button data-view="single" class="on">Single</button>
+    <button data-view="variants">Variants</button>
+    <button data-view="sheet">Contact sheet</button>
+  </nav>
+</header>
+
+<main>
+  <aside class="panel left">
+    <section>
+      <h2>Sliders <small>the client's data</small></h2>
+      <div id="axes"></div>
+    </section>
+
+    <section>
+      <h2>Variation <small>many outputs per position</small></h2>
+      <div class="row"><label>Seed</label>
+        <input type="range" id="seed" min="0" max="199" step="1" value="0">
+        <output id="seedOut">0</output>
+      </div>
+      <div class="row"><label>Amount</label>
+        <input type="range" id="variance" min="0" max="100" step="1" value="35">
+        <output id="varianceOut">0.35</output>
+      </div>
+      <button class="wide" id="reroll">Reroll seed</button>
+    </section>
+
+    <section>
+      <h2>Blend <small>how the space behaves</small></h2>
+      <div class="row"><label>Mode</label>
+        <select id="mode">
+          <option value="rbf">RBF (exact at keyframes)</option>
+          <option value="shepard">Shepard (sharpened)</option>
+        </select>
+      </div>
+      <div class="row"><label>Sharpen</label>
+        <input type="range" id="sharpen" min="1" max="12" step="0.5" value="3">
+        <output id="sharpenOut">3</output>
+      </div>
+      <div class="row"><label>Snap</label>
+        <input type="range" id="snap" min="0" max="100" step="1" value="0">
+        <output id="snapOut">0.00</output>
+      </div>
+      <div class="row"><label>Steps</label>
+        <select id="levels">
+          <option value="0">continuous</option>
+          <option value="3">3 per axis</option>
+          <option value="5" selected>5 per axis</option>
+          <option value="7">7 per axis</option>
+        </select>
+      </div>
+      <div class="row"><label>Domain</label>
+        <select id="domain">
+          <option value="params">parameters (safe)</option>
+          <option value="outline">outlines (compare)</option>
+        </select>
+      </div>
+      <div class="row"><label>Show</label>
+        <select id="debug">
+          <option value="off">outline only</option>
+          <option value="skeleton">+ spine and nodes</option>
+          <option value="raw">no curve fitting</option>
+        </select>
+      </div>
+    </section>
+
+    <section>
+      <h2>Spine <small>edit one keyframe</small></h2>
+      <div class="row"><label>Keyframe</label>
+        <select id="editTarget"></select>
+      </div>
+      <p class="hint" id="editHint">Pick a keyframe to drag its nodes and handles.</p>
+      <button class="wide" id="resetNodes">Reset this keyframe's nodes</button>
+    </section>
+
+    <section>
+      <h2>Export</h2>
+      <button class="wide" id="exportSvg">Download SVG</button>
+      <button class="wide" id="exportSheet">Download sheet SVG</button>
+      <button class="wide" id="copyKeyframe">Copy as keyframe</button>
+      <button class="wide" id="copySkin">Copy whole skin</button>
+      <p class="hint" id="copyHint"></p>
+    </section>
+  </aside>
+
+  <div class="stage" id="stage"></div>
+
+  <aside class="panel right">
+    <section>
+      <h2>Checks</h2>
+      <div id="flags"></div>
+    </section>
+    <section>
+      <h2>Events fired</h2>
+      <div id="rules"></div>
+    </section>
+    <section>
+      <h2>Keyframe weights</h2>
+      <div id="weights"></div>
+    </section>
+    <section>
+      <h2>Parameters</h2>
+      <div id="params" class="params"></div>
+    </section>
+  </aside>
+</main>
+
+<script type="module" src="src/app.js"></script>
+</body>
+</html>

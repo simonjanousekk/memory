@@ -6,7 +6,7 @@
 #include <display.h>
 #include <wifi/wifi_credentials.h>
 
-#define WIFI_PER_NETWORK_TIMEOUT_MS 4000
+#define WIFI_PER_NETWORK_TIMEOUT_MS 8000
 
 // ---------------------------------------------------------------------------
 // State
@@ -74,7 +74,7 @@ void wifi_manager_update() {
     _wifi_rssi = WiFi.RSSI();
     IPAddress ip = WiFi.localIP();
     snprintf(_wifi_ip, sizeof(_wifi_ip), "%u.%u.%u.%u", ip[0], ip[1], ip[2],
-             ip[3]);
+        ip[3]);
     return;
   }
 
@@ -95,24 +95,24 @@ void wifi_manager_update() {
 // Returns true once all networks have been tried and none succeeded.
 bool wifi_manager_failed() { return _wifi_state == WIFI_TEST_FAILED; }
 
-void wifi_debug_display(char *buf, int len) {
+void wifi_debug_display(char* buf, int len) {
   switch (_wifi_state) {
-  case WIFI_TEST_IDLE:
-    snprintf(buf, len, "WiFi: idle");
-    break;
-  case WIFI_TEST_CONNECTING: {
-    int elapsed = (int)((millis() - _wifi_start_ms) / 1000);
-    snprintf(buf, len, "WiFi %d/%d %.16s %ds", _wifi_net_idx + 1,
-             WIFI_NETWORK_COUNT, _wifi_ssid, elapsed);
-    break;
-  }
-  case WIFI_TEST_CONNECTED:
-    snprintf(buf, len, "WiFi OK %.12s %ddBm %s", _wifi_ssid, _wifi_rssi,
-             _wifi_ip);
-    break;
-  case WIFI_TEST_FAILED:
-    snprintf(buf, len, "WiFi: all %d failed", WIFI_NETWORK_COUNT);
-    break;
+    case WIFI_TEST_IDLE:
+      snprintf(buf, len, "WiFi: idle");
+      break;
+    case WIFI_TEST_CONNECTING: {
+      int elapsed = (int)((millis() - _wifi_start_ms) / 1000);
+      snprintf(buf, len, "WiFi %d/%d %.16s %ds", _wifi_net_idx + 1,
+          WIFI_NETWORK_COUNT, _wifi_ssid, elapsed);
+      break;
+    }
+    case WIFI_TEST_CONNECTED:
+      snprintf(buf, len, "WiFi OK %.12s %ddBm %s", _wifi_ssid, _wifi_rssi,
+          _wifi_ip);
+      break;
+    case WIFI_TEST_FAILED:
+      snprintf(buf, len, "WiFi: all %d failed", WIFI_NETWORK_COUNT);
+      break;
   }
 }
 
