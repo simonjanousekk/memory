@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pio run)",
+      "Bash(~/.platformio/penv/bin/pio run)",
+      "Bash(pio run -e:*)",
+      "Bash(~/.platformio/penv/bin/pio run -e:*)",
+      "Bash(pio run -t compiledb)",
+      "Bash(~/.platformio/penv/bin/pio run -t compiledb)",
+      "Bash(pio check:*)",
+      "Bash(~/.platformio/penv/bin/pio check:*)",
+      "Bash(pio pkg list:*)",
+      "Bash(~/.platformio/penv/bin/pio pkg list:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm install)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)"
+    ],
+    "ask": [
+      "Bash(pio run -t upload:*)",
+      "Bash(~/.platformio/penv/bin/pio run -t upload:*)",
+      "Bash(supabase db push:*)",
+      "Bash(supabase functions deploy:*)"
+    ],
+    "deny": [
+      "Read(./memory_platformio/include/wifi/wifi_credentials.h)",
+      "Read(./**/.env)",
+      "Read(./**/.env.*)"
+    ]
+  }
+}

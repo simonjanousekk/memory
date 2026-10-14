@@ -5,4 +5,9 @@
 .vscode/ipch
 
 *.DS_Store
-include/wifi_credentials.h
+include/wifi/wifi_credentials.h
+.cache/
+compile_commands.json
+
+# Native simulator screenshots
+sim-*.bmp

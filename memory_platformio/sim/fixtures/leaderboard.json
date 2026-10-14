@@ -1,0 +1,310 @@
+[
+  {
+    "name": "ANNA",
+    "rank": 1,
+    "is_ghost": false,
+    "games": [
+      {
+        "maze_seed": 4071050724,
+        "maze_time": 7642,
+        "words_seed": 2795742288,
+        "words_time": 5540,
+        "count_seed": 3527346212,
+        "count_time": 5836
+      },
+      {
+        "maze_seed": 1570621944,
+        "maze_time": 9940,
+        "words_seed": 3907149204,
+        "words_time": 7633,
+        "count_seed": 161042648,
+        "count_time": 4126
+      }
+    ]
+  },
+  {
+    "name": "PETR",
+    "rank": 2,
+    "is_ghost": false,
+    "games": [
+      {
+        "maze_seed": 300026767,
+        "maze_time": 8761,
+        "words_seed": 2366729934,
+        "words_time": 7828,
+        "count_seed": 3551302831,
+        "count_time": 6418
+      },
+      {
+        "maze_seed": 4069265501,
+        "maze_time": 8661,
+        "words_seed": 2694805173,
+        "words_time": 8608,
+        "count_seed": 265695473,
+        "count_time": 6466
+      }
+    ]
+  },
+  {
+    "name": "MAREK",
+    "rank": 3,
+    "is_ghost": false,
+    "games": [
+      {
+        "maze_seed": 212984476,
+        "maze_time": 13933,
+        "words_seed": 200071088,
+        "words_time": 9099,
+        "count_seed": 571981485,
+        "count_time": 5674
+      },
+      {
+        "maze_seed": 619570852,
+        "maze_time": 11250,
+        "words_seed": 2452055640,
+        "words_time": 7788,
+        "count_seed": 3505236015,
+        "count_time": 7400
+      }
+    ]
+  },
+  {
+    "name": "JANA",
+    "rank": 4,
+    "is_ghost": false,
+    "games": [
+      {
+        "maze_seed": 2497953681,
+        "maze_time": 12218,
+        "words_seed": 806899909,
+        "words_time": 8680,
+        "count_seed": 2352544553,
+        "count_time": 8046
+      }
+    ]
+  },
+  {
+    "name": "TOMAS",
+    "rank": 5,
+    "is_ghost": false,
+    "games": [
+      {
+        "maze_seed": 255985076,
+        "maze_time": 13333,
+        "words_seed": 2132084004,
+        "words_time": 11082,
+        "count_seed": 1836494974,
+        "count_time": 8886
+      },
+      {
+        "maze_seed": 1999744784,
+        "maze_time": 13098,
+        "words_seed": 1946412080,
+        "words_time": 9169,
+        "count_seed": 1066984055,
+        "count_time": 8971
+      },
+      {
+        "maze_seed": 3002158228,
+        "maze_time": 14458,
+        "words_seed": 351564607,
+        "words_time": 10446,
+        "count_seed": 2255701793,
+        "count_time": 7475
+      }
+    ]
+  },
+  {
+    "name": "EVA",
+    "rank": 6,
+    "is_ghost": false,
+    "games": [
+      {
+        "maze_seed": 3132943648,
+        "maze_time": 12870,
+        "words_seed": 2615459068,
+        "words_time": 13653,
+        "count_seed": 507088656,
+        "count_time": 8013
+      },
+      {
+        "maze_seed": 708506836,
+        "maze_time": 15157,
+        "words_seed": 652768597,
+        "words_time": 13355,
+        "count_seed": 1811180649,
+        "count_time": 5507
+      }
+    ]
+  },
+  {
+    "name": "ONDRA",
+    "rank": 7,
+    "is_ghost": false,
+    "games": [
+      {
+        "maze_seed": 333377414,
+        "maze_time": 16074,
+        "words_seed": 2461127666,
+        "words_time": 13142,
+        "count_seed": 3514800842,
+        "count_time": 7356
+      },
+      {
+        "maze_seed": 2986270863,
+        "maze_time": 12825,
+        "words_seed": 2133201995,
+        "words_time": 11736,
+        "count_seed": 1959386986,
+        "count_time": 5985
+      },
+      {
+        "maze_seed": 401991735,
+        "maze_time": 17486,
+        "words_seed": 2036236841,
+        "words_time": 12524,
+        "count_seed": 279172786,
+        "count_time": 5939
+      }
+    ]
+  },
+  {
+    "name": "KLARA",
+    "rank": 8,
+    "is_ghost": false,
+    "games": [
+      {
+        "maze_seed": 1329753547,
+        "maze_time": 15965,
+        "words_seed": 4265314571,
+        "words_time": 13083,
+        "count_seed": 1914012528,
+        "count_time": 7579
+      },
+      {
+        "maze_seed": 1656961615,
+        "maze_time": 17946,
+        "words_seed": 1490376253,
+        "words_time": 8419,
+        "count_seed": 1982966162,
+        "count_time": 7997
+      },
+      {
+        "maze_seed": 2623879480,
+        "maze_time": 11587,
+        "words_seed": 253207296,
+        "words_time": 9804,
+        "count_seed": 1234510745,
+        "count_time": 6663
+      }
+    ]
+  },
+  {
+    "name": "VOJTA",
+    "rank": 9,
+    "is_ghost": false,
+    "games": [
+      {
+        "maze_seed": 1708957520,
+        "maze_time": 14553,
+        "words_seed": 3742728880,
+        "words_time": 12374,
+        "count_seed": 714537754,
+        "count_time": 8984
+      }
+    ]
+  },
+  {
+    "name": "LUCIE",
+    "rank": 10,
+    "is_ghost": false,
+    "games": [
+      {
+        "maze_seed": 1193309983,
+        "maze_time": 19738,
+        "words_seed": 3518780121,
+        "words_time": 12458,
+        "count_seed": 2363175007,
+        "count_time": 8309
+      },
+      {
+        "maze_seed": 1783684941,
+        "maze_time": 20676,
+        "words_seed": 2932273188,
+        "words_time": 15996,
+        "count_seed": 4113424221,
+        "count_time": 7999
+      },
+      {
+        "maze_seed": 356416554,
+        "maze_time": 13303,
+        "words_seed": 996247158,
+        "words_time": 14236,
+        "count_seed": 51810462,
+        "count_time": 9652
+      }
+    ]
+  },
+  {
+    "name": "BOT1",
+    "rank": 11,
+    "is_ghost": true,
+    "games": [
+      {
+        "maze_seed": 783156687,
+        "maze_time": 14741,
+        "words_seed": 17581913,
+        "words_time": 10708,
+        "count_seed": 2296050689,
+        "count_time": 9310
+      },
+      {
+        "maze_seed": 2432417041,
+        "maze_time": 15273,
+        "words_seed": 538981926,
+        "words_time": 15154,
+        "count_seed": 2214018838,
+        "count_time": 13261
+      },
+      {
+        "maze_seed": 2813059522,
+        "maze_time": 18677,
+        "words_seed": 231897701,
+        "words_time": 13246,
+        "count_seed": 3740828468,
+        "count_time": 12103
+      }
+    ]
+  },
+  {
+    "name": "BOT2",
+    "rank": 12,
+    "is_ghost": true,
+    "games": [
+      {
+        "maze_seed": 3426838947,
+        "maze_time": 18339,
+        "words_seed": 1709696035,
+        "words_time": 13339,
+        "count_seed": 444688428,
+        "count_time": 10518
+      },
+      {
+        "maze_seed": 1719888006,
+        "maze_time": 13398,
+        "words_seed": 289255805,
+        "words_time": 18329,
+        "count_seed": 1892478001,
+        "count_time": 8252
+      },
+      {
+        "maze_seed": 1460519317,
+        "maze_time": 18751,
+        "words_seed": 439717024,
+        "words_time": 9941,
+        "count_seed": 649677951,
+        "count_time": 10909
+      }
+    ]
+  }
+]

@@ -35,7 +35,7 @@ if ! command -v supabase >/dev/null 2>&1; then
 fi
 
 _show_ranks() {
-  supabase db execute --sql "SELECT rank, name, created_at FROM public.players ORDER BY rank ASC, created_at ASC;"
+  supabase db query --linked "SELECT rank, name, created_at FROM public.players ORDER BY rank ASC, created_at ASC;"
 }
 
 echo "=== Ranks before ==="
@@ -50,9 +50,9 @@ fi
 echo ""
 echo "=== Renumbering ==="
 if [ -f "$SQL_FILE" ]; then
-  supabase db execute --file "$SQL_FILE"
+  supabase db query --linked --file "$SQL_FILE"
 else
-  supabase db execute --sql "SELECT public.renumber_players();"
+  supabase db query --linked "SELECT public.renumber_players();"
 fi
 
 echo ""

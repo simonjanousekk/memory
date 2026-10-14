@@ -1,1 +1,12 @@
 **/.DS_Store
+
+# Claude Code personal settings
+.claude/settings.local.json
+
+# Supabase CLI local state
+supabase/.temp/
+
+# KiCad local state
+memory_pcb/fp-info-cache
+*.kicad_prl
+*.lck

@@ -1,0 +1,23 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Sim: build & run",
+            "type": "shell",
+            "command": "${userHome}/.platformio/penv/bin/pio run -e native && .pio/build/native/program",
+            "options": { "cwd": "${workspaceFolder}" },
+            "group": { "kind": "build", "isDefault": true },
+            "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "Sim: build & run (live leaderboard, read-only)",
+            "type": "shell",
+            "command": "${userHome}/.platformio/penv/bin/pio run -e native && .pio/build/native/program --net=live",
+            "options": { "cwd": "${workspaceFolder}" },
+            "group": "build",
+            "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
+            "problemMatcher": ["$gcc"]
+        }
+    ]
+}
